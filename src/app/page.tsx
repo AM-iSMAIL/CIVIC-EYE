@@ -1,5 +1,8 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   Sparkles,
   MapPin,
@@ -13,11 +16,36 @@ import {
   Eye,
   Layers,
   Map as MapIcon,
+  Play,
 } from 'lucide-react';
 import { Button } from '@/components/common/Button';
 import { Card } from '@/components/common/Card';
+import { CivicEyeSplashScreen } from '@/components/splash/CivicEyeSplashScreen';
 
 export default function HomePage() {
+  const router = useRouter();
+  const [showSplash, setShowSplash] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    // Check if user has already seen splash screen in this session
+    const timer = setTimeout(() => {
+      const hasSeenSplash = sessionStorage.getItem('civiceye_splash_viewed');
+      setShowSplash(!hasSeenSplash);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleSplashComplete = () => {
+    sessionStorage.setItem('civiceye_splash_viewed', 'true');
+    setShowSplash(false);
+    // Transition automatically to the login / identity page
+    router.push('/login');
+  };
+
+  const replaySplash = () => {
+    setShowSplash(true);
+  };
+
   const steps = [
     {
       number: '01',
@@ -82,6 +110,11 @@ export default function HomePage() {
 
   return (
     <div className="relative overflow-hidden">
+      {/* 1. CivicEye Splash Screen: Plays as the first screen of the application */}
+      {showSplash === true && (
+        <CivicEyeSplashScreen onComplete={handleSplashComplete} />
+      )}
+
       {/* Background Glows & Grid Pattern */}
       <div className="absolute inset-0 civic-grid pointer-events-none opacity-40" />
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] civic-radar rounded-full blur-3xl pointer-events-none -z-10" />
@@ -94,7 +127,14 @@ export default function HomePage() {
             <Eye className="w-3.5 h-3.5 text-emerald-400" />
             <span>AI Urban Intelligence Platform</span>
             <span className="w-1 h-1 rounded-full bg-slate-600" />
-            <span className="text-slate-300">Phase 1 Foundation</span>
+            <button
+              onClick={replaySplash}
+              className="text-slate-400 hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
+              title="Replay AI splash screen"
+            >
+              <Play className="w-2.5 h-2.5" />
+              <span>Intro</span>
+            </button>
           </div>
 
           {/* Main Title & Tagline */}
@@ -134,6 +174,16 @@ export default function HomePage() {
                 leftIcon={<MapIcon className="w-5 h-5 text-cyan-400" />}
               >
                 View Civic Map
+              </Button>
+            </Link>
+
+            <Link href="/login" className="w-full sm:w-auto">
+              <Button
+                variant="secondary"
+                size="lg"
+                className="w-full sm:w-auto px-8"
+              >
+                Identity Portal
               </Button>
             </Link>
           </div>

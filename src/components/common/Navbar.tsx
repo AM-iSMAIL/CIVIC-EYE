@@ -7,7 +7,6 @@ import { usePathname } from 'next/navigation';
 import { siteConfig } from '@/config/site';
 import { useAuth } from '@/context/AuthContext';
 import {
-  Eye,
   PlusCircle,
   Map,
   Shield,
@@ -21,6 +20,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { Button } from './Button';
+import { CivicEyeLogo } from '@/components/splash/CivicEyeLogo';
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -182,14 +182,10 @@ export const Navbar: React.FC = () => {
             href="/"
             className="flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-lg p-1"
           >
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-emerald-500 to-cyan-400 p-0.5 shadow-md shadow-emerald-500/20 group-hover:shadow-emerald-500/40 transition-shadow">
-              <div className="w-full h-full bg-slate-950 rounded-[7px] flex items-center justify-center">
-                <Eye className="w-5 h-5 text-emerald-400 group-hover:scale-110 transition-transform" />
-              </div>
-            </div>
+            <CivicEyeLogo size={32} />
             <div className="flex flex-col">
               <span className="text-lg font-bold tracking-tight text-white flex items-center gap-1.5">
-                Civic<span className="text-emerald-400">Eye</span>
+                CIVIC<span className="text-blue-500">EYE</span>
               </span>
               <span className="text-[10px] text-slate-400 font-medium tracking-wide uppercase">
                 AI Urban Intelligence
