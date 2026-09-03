@@ -111,6 +111,13 @@ CivicEye is an AI-powered civic issue reporting and city intelligence platform. 
   - Redesigned all surfaces: Splash screen, Dual Citizen/Admin Login card (`/login`), Citizen Home (`/`), Reporting Wizard steps 1-4 (`/report`), Civic Map (`/map`), Citizen History (`/my-reports`, `/notifications`), Citizen Profile (`/profile`), and Admin Command Center (`/admin`, `/admin/incidents`, `/admin/map`, `/admin/analytics`, `/admin/hub`).
   - Implemented Dual Citizen / Admin login mode switcher on `/login` with real-time municipal verification.
   - Configured immediate Superadmin clearance for `amismail164@gmail.com` in `roles.ts`, `auth.ts`, `firestore.ts`, and `AuthContext.tsx`.
+- [x] Phase 12: Android Native Application & Mobile PWA Integration
+  - Native Android project scaffolding in `./android` powered by Capacitor (`@capacitor/android`, `@capacitor/core`, `@capacitor/cli`).
+  - Native plugins configured: `@capacitor/camera`, `@capacitor/geolocation`, `@capacitor/app`, `@capacitor/status-bar`, `@capacitor/splash-screen`.
+  - Android permissions declared in `AndroidManifest.xml` (`CAMERA`, `ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION`, `INTERNET`).
+  - Dynamic Web App Manifest (`src/app/manifest.ts`) and mobile viewport optimization (`viewport-fit=cover`, maximum-scale lock).
+  - Instant mobile PWA installability ("Install app" / "Add to Home screen") from mobile Chrome/Edge.
+  - CLI and Android Studio workflow documented in `ANDROID_GUIDE.md`.
 - [x] UI/UX: Futuristic AI Loading/Splash Screen & Identity Portal (Class AI white design language, geometric AI eye symbol, 60fps cinematic sequence, auto-transition)
 
 ---

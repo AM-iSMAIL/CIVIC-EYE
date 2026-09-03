@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">CivicEye</string>
+    <string name="title_activity_main">CivicEye</string>
+    <string name="package_name">org.civiceye.app</string>
+    <string name="custom_url_scheme">org.civiceye.app</string>
+</resources>
