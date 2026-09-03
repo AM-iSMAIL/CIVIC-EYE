@@ -13,12 +13,14 @@ import { Footer } from './Footer';
 export const RootShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const pathname = usePathname();
   const isAdminRoute = pathname.startsWith('/admin');
+  const isAuthRoute = pathname === '/login';
+  const hideGlobalChrome = isAdminRoute || isAuthRoute;
 
   return (
     <>
-      {!isAdminRoute && <Navbar />}
+      {!hideGlobalChrome && <Navbar />}
       <main className="flex-1 flex flex-col">{children}</main>
-      {!isAdminRoute && <Footer />}
+      {!hideGlobalChrome && <Footer />}
     </>
   );
 };
