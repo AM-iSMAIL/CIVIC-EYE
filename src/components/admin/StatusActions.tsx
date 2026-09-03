@@ -69,7 +69,7 @@ export const StatusActions: React.FC<StatusActionsProps> = ({
           variant="outline"
           size={size}
           onClick={() => setTargetStatus('acknowledged')}
-          className="text-cyan-400 border-cyan-800/60 hover:bg-cyan-950/40"
+          className="text-blue-700 border-blue-200 hover:bg-blue-50"
           leftIcon={<Clock className="w-3.5 h-3.5" />}
         >
           Acknowledge
@@ -82,7 +82,7 @@ export const StatusActions: React.FC<StatusActionsProps> = ({
           variant="outline"
           size={size}
           onClick={() => setTargetStatus('in_progress')}
-          className="text-amber-400 border-amber-800/60 hover:bg-amber-950/40"
+          className="text-amber-700 border-amber-200 hover:bg-amber-50"
           leftIcon={<Play className="w-3.5 h-3.5" />}
         >
           Start Work
@@ -95,7 +95,7 @@ export const StatusActions: React.FC<StatusActionsProps> = ({
           variant="primary"
           size={size}
           onClick={() => setTargetStatus('resolved')}
-          className="bg-emerald-600 hover:bg-emerald-500 text-white"
+          className="bg-emerald-600 hover:bg-emerald-700 text-white"
           leftIcon={<CheckCircle2 className="w-3.5 h-3.5" />}
         >
           Mark Resolved
@@ -108,7 +108,7 @@ export const StatusActions: React.FC<StatusActionsProps> = ({
           variant="ghost"
           size={size}
           onClick={() => setTargetStatus('rejected')}
-          className="text-rose-400 hover:bg-rose-950/40 hover:text-rose-300"
+          className="text-rose-600 hover:bg-rose-50"
           leftIcon={<XCircle className="w-3.5 h-3.5" />}
         >
           Reject
@@ -121,7 +121,7 @@ export const StatusActions: React.FC<StatusActionsProps> = ({
           variant="outline"
           size={size}
           onClick={() => setTargetStatus('reported')}
-          className="text-slate-300 border-slate-700"
+          className="text-slate-700 border-slate-200 hover:bg-slate-50"
           leftIcon={<RotateCcw className="w-3.5 h-3.5" />}
         >
           Reinstate
@@ -130,36 +130,36 @@ export const StatusActions: React.FC<StatusActionsProps> = ({
 
       {/* Confirmation Modal */}
       {targetStatus && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-150">
-          <div className="max-w-md w-full rounded-2xl bg-slate-900 border border-slate-700 p-6 shadow-2xl space-y-4">
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-150">
+          <div className="max-w-md w-full rounded-2xl bg-white border border-slate-200 p-6 shadow-2xl space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shrink-0">
                 <AlertTriangle className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-white">
+                <h3 className="text-base font-bold text-slate-900">
                   Confirm Status Transition
                 </h3>
-                <p className="text-xs text-slate-400">
-                  Update dispatch status from <span className="font-semibold text-slate-200 uppercase">{currentStatus}</span> to <span className="font-semibold text-emerald-400 uppercase">{targetStatus}</span>
+                <p className="text-xs text-slate-500">
+                  Update dispatch status from <span className="font-semibold text-slate-700 uppercase">{currentStatus}</span> to <span className="font-semibold text-blue-600 uppercase">{targetStatus}</span>
                 </p>
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300">
+              <label className="text-xs font-bold text-slate-700">
                 Operator Dispatch Note (Optional)
               </label>
               <textarea
                 value={operatorNote}
                 onChange={(e) => setOperatorNote(e.target.value)}
                 placeholder="e.g. Work crew dispatched to site / repaired asphalt overlay."
-                className="w-full h-20 p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-emerald-500"
+                className="w-full h-20 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500"
               />
             </div>
 
             {error && (
-              <p className="text-xs text-rose-400 font-medium">
+              <p className="text-xs text-rose-600 font-medium">
                 {error}
               </p>
             )}

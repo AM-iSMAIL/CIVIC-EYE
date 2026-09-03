@@ -19,6 +19,7 @@ import {
 } from '@/services/auth';
 import { syncUserToFirestore } from '@/services/firestore';
 import type { CivicUser } from '@/types/user';
+import { isAdminEmail } from '@/config/roles';
 
 interface AuthContextValue {
   /** Mapped CivicEye domain user, null when signed out */
@@ -79,7 +80,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             userDocUnsubscribe = onSnapshot(userDocRef, (snap) => {
               if (snap.exists()) {
                 const data = snap.data();
-                const role = data.role || 'citizen';
+                const role = isAdminEmail(user.email) ? 'admin' : (data.role || 'citizen');
                 setCurrentUser((prev) => (prev ? { ...prev, role } : { ...baseUser, role }));
               }
             });
@@ -129,8 +130,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [router]);
 
   const isAdmin = useMemo(() => {
-    return currentUser?.role === 'admin';
-  }, [currentUser?.role]);
+    return currentUser?.role === 'admin' || isAdminEmail(currentUser?.email);
+  }, [currentUser?.role, currentUser?.email]);
 
   const value = useMemo<AuthContextValue>(
     () => ({

@@ -30,36 +30,41 @@ interface NotificationItem {
 
 const statusConfig: Record<
   IncidentStatus,
-  { label: string; color: string; icon: React.ReactNode; message: string }
+  { label: string; color: string; badge: string; icon: React.ReactNode; message: string }
 > = {
   reported: {
     label: 'Submitted',
-    color: 'text-slate-400 border-slate-700/60 bg-slate-900/60',
-    icon: <Clock className="w-4 h-4 text-slate-400" />,
+    color: 'border-slate-200/90 hover:border-slate-300',
+    badge: 'text-slate-700 bg-slate-100 border-slate-200',
+    icon: <Clock className="w-4 h-4 text-slate-500" />,
     message: 'Your report has been received and is awaiting review.',
   },
   acknowledged: {
     label: 'Acknowledged',
-    color: 'text-blue-400 border-blue-800/50 bg-blue-950/20',
-    icon: <Sparkles className="w-4 h-4 text-blue-400" />,
+    color: 'border-blue-200 hover:border-blue-300',
+    badge: 'text-blue-700 bg-blue-50 border-blue-100',
+    icon: <Sparkles className="w-4 h-4 text-blue-600" />,
     message: 'Municipal teams have acknowledged your report.',
   },
   in_progress: {
     label: 'In Progress',
-    color: 'text-amber-400 border-amber-800/50 bg-amber-950/20',
-    icon: <ArrowRight className="w-4 h-4 text-amber-400" />,
+    color: 'border-indigo-200 hover:border-indigo-300',
+    badge: 'text-indigo-700 bg-indigo-50 border-indigo-100',
+    icon: <ArrowRight className="w-4 h-4 text-indigo-600" />,
     message: 'Work crews have been dispatched to address this issue.',
   },
   resolved: {
     label: 'Resolved',
-    color: 'text-emerald-400 border-emerald-800/50 bg-emerald-950/20',
-    icon: <CheckCircle2 className="w-4 h-4 text-emerald-400" />,
+    color: 'border-emerald-200 hover:border-emerald-300',
+    badge: 'text-emerald-700 bg-emerald-50 border-emerald-100',
+    icon: <CheckCircle2 className="w-4 h-4 text-emerald-600" />,
     message: 'This civic issue has been resolved. Thank you for reporting!',
   },
   rejected: {
     label: 'Rejected',
-    color: 'text-rose-400 border-rose-800/50 bg-rose-950/20',
-    icon: <XCircle className="w-4 h-4 text-rose-400" />,
+    color: 'border-rose-200 hover:border-rose-300',
+    badge: 'text-rose-700 bg-rose-50 border-rose-100',
+    icon: <XCircle className="w-4 h-4 text-rose-600" />,
     message: 'This report could not be processed. It may be a duplicate or outside jurisdiction.',
   },
 };
@@ -120,13 +125,13 @@ function NotificationsContent() {
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       {/* Page Header */}
       <div className="space-y-1">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
-            <Bell className="w-4 h-4 text-emerald-400" />
+        <div className="flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center">
+            <Bell className="w-5 h-5 text-blue-600" />
           </div>
-          <h1 className="text-2xl font-black text-white tracking-tight">Notifications</h1>
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight">Notifications</h1>
         </div>
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-slate-500">
           Status updates for all your civic issue reports.
         </p>
       </div>
@@ -137,13 +142,13 @@ function NotificationsContent() {
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="h-24 rounded-xl bg-slate-900/60 border border-slate-800 animate-pulse"
+              className="h-24 rounded-2xl bg-slate-100/80 border border-slate-200 animate-pulse"
             />
           ))}
         </div>
       ) : notifications.length === 0 ? (
         <EmptyState
-          icon={<Bell className="w-8 h-8 text-slate-500" />}
+          icon={<Bell className="w-8 h-8 text-slate-400" />}
           title="No notifications yet"
           description="Once you submit a civic issue report, you'll receive status updates here as municipal teams process your report."
         />
@@ -154,27 +159,27 @@ function NotificationsContent() {
             return (
               <Link key={notif.id} href="/my-reports" className="block group">
                 <Card
-                  className={`p-4 border transition-all duration-150 group-hover:scale-[1.01] ${cfg.color}`}
+                  className={`p-4 bg-white border transition-all duration-150 hover:shadow-sm ${cfg.color}`}
                 >
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 shrink-0">{cfg.icon}</div>
                     <div className="flex-1 min-w-0 space-y-1">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-sm font-semibold text-white capitalize">
+                        <span className="text-sm font-bold text-slate-900 capitalize">
                           {notif.category.replace(/_/g, ' ')}
                         </span>
-                        <span className="text-[10px] text-slate-500 shrink-0">
+                        <span className="text-[10px] text-slate-400 shrink-0">
                           {formatDate(notif.updatedAt ?? notif.createdAt)}
                         </span>
                       </div>
-                      <p className="text-xs text-slate-400 leading-relaxed">{cfg.message}</p>
-                      <div className="flex items-center gap-1.5">
+                      <p className="text-xs text-slate-600 leading-relaxed">{cfg.message}</p>
+                      <div className="flex items-center gap-1.5 pt-1">
                         <span
-                          className={`text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded ${cfg.color} border`}
+                          className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${cfg.badge} border`}
                         >
                           {cfg.label}
                         </span>
-                        <span className="text-[10px] font-mono text-slate-600">
+                        <span className="text-[10px] font-mono text-slate-400">
                           #{notif.incidentId.slice(0, 8)}
                         </span>
                       </div>

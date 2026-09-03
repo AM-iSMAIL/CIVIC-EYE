@@ -14,7 +14,7 @@ const inter = Inter({
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#0b0f19',
+  themeColor: '#ffffff',
 };
 
 export const metadata: Metadata = {
@@ -37,8 +37,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} h-full antialiased dark`}>
-      <body className="min-h-screen flex flex-col bg-[#0b0f19] text-slate-100 font-sans selection:bg-emerald-500/30 selection:text-emerald-300">
+    <html lang="en" className={`${inter.variable} h-full antialiased`}>
+      <body className="min-h-screen flex flex-col bg-[#fbfcfd] text-slate-900 font-sans selection:bg-blue-500/20 selection:text-blue-700">
         <AuthProvider>
           <RootShell>{children}</RootShell>
         </AuthProvider>

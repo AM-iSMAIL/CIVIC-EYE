@@ -67,20 +67,20 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
   return (
     <div
       onClick={onClick}
-      className={`group bg-slate-900/90 border border-slate-800 hover:border-slate-700 rounded-xl p-5 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 ${
+      className={`group bg-white border border-slate-200/80 hover:border-slate-300 rounded-2xl p-5 transition-all duration-200 hover:shadow-[0_8px_24px_-4px_rgba(15,23,42,0.06)] hover:-translate-y-0.5 ${
         onClick ? 'cursor-pointer' : ''
       } ${className}`}
     >
       <div className="flex items-start justify-between gap-3 mb-3">
-        <div className="flex items-center gap-2">
-          <div className="p-2 rounded-lg bg-slate-800 border border-slate-700/60">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-slate-50 border border-slate-200/80">
             {getCategoryIcon(incident.category)}
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-slate-100 group-hover:text-emerald-400 transition-colors">
+            <h4 className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
               {incident.title || formatCategoryName(incident.category)}
             </h4>
-            <span className="text-xs text-slate-400">ID: #{incident.id.slice(0, 8)}</span>
+            <span className="text-xs text-slate-400 font-mono">ID: #{incident.id.slice(0, 8)}</span>
           </div>
         </div>
         <div className="flex flex-col items-end gap-1.5">
@@ -89,22 +89,22 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
         </div>
       </div>
 
-      <p className="text-xs sm:text-sm text-slate-300 line-clamp-2 mb-4 leading-relaxed">
+      <p className="text-xs sm:text-sm text-slate-600 line-clamp-2 mb-4 leading-relaxed">
         {incident.description}
       </p>
 
       {incident.aiAnalysis && (
-        <div className="flex items-center gap-1.5 mb-3 px-2.5 py-1.5 rounded-md bg-cyan-950/30 border border-cyan-800/40 text-xs text-cyan-300">
-          <Sparkles className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+        <div className="flex items-center gap-1.5 mb-3 px-3 py-1.5 rounded-xl bg-blue-50/70 border border-blue-100 text-xs text-blue-700">
+          <Sparkles className="w-3.5 h-3.5 text-blue-600 shrink-0" />
           <span className="truncate">
             Gemini AI: {incident.aiAnalysis.rationale || 'Verified civic defect'}
           </span>
         </div>
       )}
 
-      <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-800/70 text-xs text-slate-400">
+      <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-100 text-xs text-slate-500">
         <div className="flex items-center gap-1.5 truncate max-w-[200px]">
-          <MapPin className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+          <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
           <span className="truncate">
             {incident.location.address ||
               (incident.location.coordinates
@@ -113,7 +113,7 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
           </span>
         </div>
 
-        <div className="flex items-center gap-1.5 text-slate-500">
+        <div className="flex items-center gap-1.5 text-slate-400">
           <Calendar className="w-3.5 h-3.5 shrink-0" />
           <span>{incident.createdAt || 'Recent'}</span>
         </div>

@@ -71,7 +71,7 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
   };
 
   return (
-    <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-lg space-y-4">
+    <div className="bg-white border border-slate-200/80 rounded-2xl p-5 sm:p-6 shadow-sm space-y-4">
       {/* Hidden Fallback HTML File Input */}
       <input
         type="file"
@@ -83,16 +83,16 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
       />
 
       {/* Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
+      <div className="flex items-center justify-between pb-3 border-b border-slate-100">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-emerald-950/60 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
+          <div className="w-8 h-8 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
             <Camera className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-white tracking-wide uppercase">
+            <h3 className="text-sm font-bold text-slate-950 tracking-wide uppercase">
               STEP 2: Photographic Evidence
             </h3>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500">
               Snap a live photo of the civic defect or choose from device
             </p>
           </div>
@@ -104,8 +104,8 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
             variant="ghost"
             size="sm"
             onClick={stopCamera}
-            leftIcon={<X className="w-4 h-4 text-rose-400" />}
-            className="text-rose-300 hover:bg-rose-950/30"
+            leftIcon={<X className="w-4 h-4 text-rose-500" />}
+            className="text-rose-600 hover:bg-rose-50"
           >
             Cancel
           </Button>
@@ -114,14 +114,14 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
 
       {/* Camera Permission / Device Error Banner */}
       {error && (
-        <div className="p-4 rounded-xl bg-rose-950/30 border border-rose-800/40 text-xs text-rose-300 space-y-3">
+        <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800 space-y-3">
           <div className="flex items-start gap-2.5">
-            <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
             <div className="space-y-1">
-              <span className="font-semibold text-rose-200 block">
+              <span className="font-bold text-rose-900 block">
                 Camera Notice
               </span>
-              <p className="text-rose-300 leading-relaxed">{error.message}</p>
+              <p className="text-rose-700 leading-relaxed">{error.message}</p>
             </div>
           </div>
 
@@ -131,7 +131,7 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
               variant="outline"
               size="sm"
               onClick={() => fileInputRef.current?.click()}
-              leftIcon={<UploadCloud className="w-3.5 h-3.5" />}
+              leftIcon={<UploadCloud className="w-3.5 h-3.5 text-blue-600" />}
             >
               Upload Photo Instead
             </Button>
@@ -151,7 +151,7 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
 
       {/* Active Camera Viewfinder */}
       {isActive ? (
-        <div className="relative rounded-2xl overflow-hidden bg-black border border-slate-700 aspect-4/3 max-h-[460px] flex items-center justify-center shadow-2xl">
+        <div className="relative rounded-2xl overflow-hidden bg-black border border-slate-300 aspect-4/3 max-h-[460px] flex items-center justify-center shadow-xl">
           <video
             ref={videoRef}
             playsInline
@@ -161,9 +161,9 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
           />
 
           {/* Viewfinder Target Framing Guides */}
-          <div className="absolute inset-4 sm:inset-8 border border-white/25 rounded-xl pointer-events-none flex items-center justify-center">
-            <div className="w-12 h-12 border-2 border-emerald-400/40 rounded-full flex items-center justify-center">
-              <div className="w-2 h-2 bg-emerald-400 rounded-full animate-ping" />
+          <div className="absolute inset-4 sm:inset-8 border border-white/30 rounded-2xl pointer-events-none flex items-center justify-center">
+            <div className="w-12 h-12 border-2 border-blue-400/60 rounded-full flex items-center justify-center">
+              <div className="w-2 h-2 bg-blue-400 rounded-full animate-ping" />
             </div>
           </div>
 
@@ -183,7 +183,7 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
               type="button"
               onClick={handleCapture}
               disabled={capturing}
-              className="w-16 h-16 rounded-full bg-white hover:bg-slate-100 border-4 border-slate-900 shadow-2xl flex items-center justify-center group active:scale-95 transition-all"
+              className="w-16 h-16 rounded-full bg-white hover:bg-slate-100 border-4 border-slate-900 shadow-2xl flex items-center justify-center active:scale-95 transition-all cursor-pointer"
               title="Take Photograph"
             >
               {capturing ? (
@@ -208,16 +208,16 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
         </div>
       ) : (
         /* Camera Launch / File Fallback Dashboard */
-        <div className="border-2 border-dashed border-slate-800 hover:border-slate-700 rounded-2xl p-8 sm:p-12 text-center bg-slate-950/40 transition-all space-y-4">
-          <div className="w-16 h-16 rounded-2xl bg-emerald-950/40 border border-emerald-800/50 flex items-center justify-center text-emerald-400 mx-auto shadow-inner">
+        <div className="border-2 border-dashed border-slate-200 hover:border-slate-300 rounded-2xl p-8 sm:p-12 text-center bg-slate-50/50 transition-all space-y-4">
+          <div className="w-16 h-16 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-blue-600 mx-auto shadow-sm">
             <Camera className="w-8 h-8" />
           </div>
 
           <div className="space-y-1">
-            <h4 className="text-base font-semibold text-white">
+            <h4 className="text-base font-bold text-slate-900">
               Real Camera & Evidence Capture
             </h4>
-            <p className="text-xs text-slate-400 max-w-sm mx-auto">
+            <p className="text-xs text-slate-500 max-w-sm mx-auto">
               Launch your device camera to snap a live photo of the issue, or select an image from your device storage.
             </p>
           </div>
@@ -237,7 +237,7 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
                     <Camera className="w-4 h-4" />
                   )
                 }
-                className="w-full sm:w-auto shadow-md shadow-emerald-900/30"
+                className="w-full sm:w-auto"
               >
                 {startingCamera ? 'Starting Camera...' : 'Enable Camera'}
               </Button>
@@ -248,7 +248,7 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
               variant="outline"
               size="lg"
               onClick={() => fileInputRef.current?.click()}
-              leftIcon={<UploadCloud className="w-4 h-4 text-emerald-400" />}
+              leftIcon={<UploadCloud className="w-4 h-4 text-blue-600" />}
               className="w-full sm:w-auto"
             >
               Upload Photo

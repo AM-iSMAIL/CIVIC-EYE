@@ -12,6 +12,7 @@ import {
 } from 'firebase/auth';
 import { auth, isFirebaseConfigured } from './firebase';
 import type { CivicUser } from '@/types/user';
+import { isAdminEmail } from '@/config/roles';
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -96,13 +97,14 @@ export async function signOutUser(): Promise<{ error?: AuthError }> {
  * Map a Firebase Auth User object to the CivicEye domain model.
  */
 export function mapFirebaseUser(user: User): CivicUser {
+  const role = isAdminEmail(user.email) ? 'admin' : 'citizen';
   return {
     uid: user.uid,
     email: user.email,
     displayName: user.displayName,
     phoneNumber: user.phoneNumber ?? null,
     photoURL: user.photoURL,
-    role: 'citizen',
+    role,
     createdAt: user.metadata.creationTime ?? new Date().toISOString(),
   };
 }

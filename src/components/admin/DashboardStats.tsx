@@ -22,48 +22,48 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({ stats }) => {
       title: 'Total Incidents',
       value: stats.totalIncidents,
       subtitle: 'Recorded citizen defect logs',
-      icon: <FileText className="w-5 h-5 text-slate-300" />,
-      accent: 'border-slate-700 bg-slate-800/60',
+      icon: <FileText className="w-4 h-4 text-slate-600" />,
+      accent: 'border-slate-200 bg-slate-50',
       badge: 'All Time',
     },
     {
       title: 'Active Issues',
       value: stats.activeIssues,
       subtitle: 'Pending dispatch or in-flight',
-      icon: <Clock className="w-5 h-5 text-cyan-400" />,
-      accent: 'border-cyan-800/40 bg-cyan-950/20',
+      icon: <Clock className="w-4 h-4 text-blue-600" />,
+      accent: 'border-blue-100 bg-blue-50',
       badge: 'Unresolved',
     },
     {
       title: 'Critical Priority',
       value: stats.criticalCount,
-      subtitle: 'Immediate safety hazards (75–100)',
-      icon: <AlertOctagon className="w-5 h-5 text-rose-400" />,
-      accent: 'border-rose-800/40 bg-rose-950/20',
+      subtitle: 'Immediate safety hazards',
+      icon: <AlertOctagon className="w-4 h-4 text-rose-600" />,
+      accent: 'border-rose-100 bg-rose-50',
       badge: 'Critical Tier',
     },
     {
       title: 'High Priority',
       value: stats.highCount,
-      subtitle: 'Expedited civic repairs (50–74)',
-      icon: <AlertTriangle className="w-5 h-5 text-orange-400" />,
-      accent: 'border-orange-800/40 bg-orange-950/20',
+      subtitle: 'Expedited civic repairs',
+      icon: <AlertTriangle className="w-4 h-4 text-amber-600" />,
+      accent: 'border-amber-100 bg-amber-50',
       badge: 'High Tier',
     },
     {
       title: 'Duplicate Reports',
       value: stats.duplicateReportsCount,
       subtitle: 'Consensus corroborations',
-      icon: <Layers className="w-5 h-5 text-emerald-400" />,
-      accent: 'border-emerald-800/40 bg-emerald-950/20',
+      icon: <Layers className="w-4 h-4 text-indigo-600" />,
+      accent: 'border-indigo-100 bg-indigo-50',
       badge: 'Clustered',
     },
     {
       title: 'Resolved Issues',
       value: stats.resolvedCount,
       subtitle: 'Successfully closed work orders',
-      icon: <CheckCircle2 className="w-5 h-5 text-emerald-400" />,
-      accent: 'border-emerald-800/40 bg-emerald-950/20',
+      icon: <CheckCircle2 className="w-4 h-4 text-emerald-600" />,
+      accent: 'border-emerald-100 bg-emerald-50',
       badge: 'Verified',
     },
   ];
@@ -71,23 +71,23 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({ stats }) => {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4">
       {cards.map((c) => (
-        <Card key={c.title} className="p-4 border-slate-800 bg-slate-900/80">
+        <Card key={c.title} className="p-4 bg-white border border-slate-200/80 shadow-xs hover:border-slate-300 transition-all rounded-2xl">
           <div className="flex items-center justify-between mb-2">
-            <div className={`p-2 rounded-lg border ${c.accent}`}>
+            <div className={`p-2 rounded-xl border ${c.accent}`}>
               {c.icon}
             </div>
-            <span className="text-[10px] font-medium text-slate-400 px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">
+            <span className="text-[10px] font-bold text-slate-500 px-2 py-0.5 rounded-full bg-slate-50 border border-slate-200">
               {c.badge}
             </span>
           </div>
 
-          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
             {c.title}
           </span>
-          <div className="text-2xl font-black text-white mt-0.5 mb-1 font-mono">
+          <div className="text-2xl font-black text-slate-950 mt-0.5 mb-1 font-mono">
             {c.value}
           </div>
-          <p className="text-[10px] text-slate-500 truncate">
+          <p className="text-[10px] text-slate-400 truncate">
             {c.subtitle}
           </p>
         </Card>

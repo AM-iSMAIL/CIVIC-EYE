@@ -89,7 +89,7 @@ export default function MapPage() {
       />
 
       {/* Main Map Viewport & Detail Container */}
-      <div className="relative w-full h-[650px] rounded-2xl overflow-hidden border border-slate-800 shadow-2xl bg-slate-950">
+      <div className="relative w-full h-[650px] rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-slate-100">
         <CivicGoogleMap
           incidents={filteredIncidents}
           selectedIncident={selectedIncident}
@@ -112,11 +112,11 @@ export default function MapPage() {
         {/* Empty Filter State Overlay (if 0 matches) */}
         {!loading && incidents.length > 0 && filteredIncidents.length === 0 && (
           <div className="absolute top-16 left-1/2 -translate-x-1/2 z-10 max-w-sm w-full px-4">
-            <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 text-center shadow-lg backdrop-blur-sm space-y-1.5">
-              <span className="text-xs font-semibold text-white block">
+            <div className="p-4 rounded-2xl bg-white border border-slate-200 text-center shadow-lg space-y-1.5">
+              <span className="text-xs font-bold text-slate-900 block">
                 No matching incidents in view
               </span>
-              <p className="text-[11px] text-slate-400">
+              <p className="text-[11px] text-slate-500">
                 Try switching filters to &quot;All Issues&quot; or &quot;All Severities&quot;.
               </p>
               <Button
@@ -127,7 +127,7 @@ export default function MapPage() {
                   setSelectedCategory('all');
                   setSelectedSeverity('all');
                 }}
-                className="text-xs text-emerald-400 hover:text-emerald-300"
+                className="text-xs text-blue-600 hover:text-blue-700"
               >
                 Reset Filters
               </Button>
@@ -135,17 +135,17 @@ export default function MapPage() {
           </div>
         )}
 
-        {/* No Incidents In Firestore State (Non-blocking floating banner) */}
+        {/* No Incidents In Firestore State */}
         {!loading && incidents.length === 0 && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 max-w-sm w-full px-4">
-            <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 text-center shadow-lg backdrop-blur-sm space-y-2">
-              <div className="flex items-center justify-center gap-2 text-emerald-400">
+            <div className="p-4 rounded-2xl bg-white border border-slate-200 text-center shadow-lg space-y-2">
+              <div className="flex items-center justify-center gap-2 text-blue-600">
                 <Sparkles className="w-4 h-4" />
-                <span className="text-xs font-semibold text-white">
+                <span className="text-xs font-bold text-slate-900">
                   No Civic Incidents in View
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400">
+              <p className="text-[11px] text-slate-500">
                 Your area is clear! Click below to report a new infrastructure defect.
               </p>
               <Link href="/report" className="inline-block">

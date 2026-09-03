@@ -70,13 +70,13 @@ function MyReportsContent() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center">
-              <FileText className="w-4 h-4 text-blue-400" />
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center">
+              <FileText className="w-5 h-5 text-blue-600" />
             </div>
-            <h1 className="text-2xl font-black text-white tracking-tight">My Reports</h1>
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight">My Reports</h1>
           </div>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-slate-500">
             Track the status of all civic issues you&apos;ve submitted.
           </p>
         </div>
@@ -88,34 +88,34 @@ function MyReportsContent() {
       </div>
 
       {/* Stats Strip */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 gap-4">
         {[
           {
             label: 'Total Submitted',
             value: reports.length,
-            icon: <FileText className="w-4 h-4 text-blue-400" />,
-            color: 'border-blue-800/40 bg-blue-950/20',
+            icon: <FileText className="w-5 h-5 text-blue-600" />,
+            badge: 'bg-blue-50 border-blue-100',
           },
           {
             label: 'In Progress',
             value: reports.filter((r) => r.status === 'in_progress').length,
-            icon: <Clock className="w-4 h-4 text-amber-400" />,
-            color: 'border-amber-800/40 bg-amber-950/20',
+            icon: <Clock className="w-5 h-5 text-amber-600" />,
+            badge: 'bg-amber-50 border-amber-100',
           },
           {
             label: 'Resolved',
             value: reports.filter((r) => r.status === 'resolved').length,
-            icon: <CheckCircle2 className="w-4 h-4 text-emerald-400" />,
-            color: 'border-emerald-800/40 bg-emerald-950/20',
+            icon: <CheckCircle2 className="w-5 h-5 text-emerald-600" />,
+            badge: 'bg-emerald-50 border-emerald-100',
           },
         ].map((stat) => (
           <Card
             key={stat.label}
-            className={`${stat.color} p-4 flex flex-col items-center text-center gap-2`}
+            className="p-5 flex flex-col items-center text-center gap-2 bg-white border border-slate-200/80 shadow-sm"
           >
-            {stat.icon}
-            <span className="text-2xl font-black text-white">{stat.value}</span>
-            <span className="text-[11px] text-slate-400 font-medium">{stat.label}</span>
+            <div className={`p-2.5 rounded-xl border ${stat.badge}`}>{stat.icon}</div>
+            <span className="text-2xl font-black text-slate-950">{stat.value}</span>
+            <span className="text-xs text-slate-500 font-medium">{stat.label}</span>
           </Card>
         ))}
       </div>
@@ -126,13 +126,13 @@ function MyReportsContent() {
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="h-20 rounded-xl bg-slate-900/60 border border-slate-800 animate-pulse"
+              className="h-20 rounded-2xl bg-slate-100/80 border border-slate-200 animate-pulse"
             />
           ))}
         </div>
       ) : reports.length === 0 ? (
         <EmptyState
-          icon={<AlertCircle className="w-8 h-8 text-slate-500" />}
+          icon={<AlertCircle className="w-8 h-8 text-slate-400" />}
           title="No reports yet"
           description="You haven't submitted any civic issue reports. Tap the button above to file your first report."
         />
@@ -141,20 +141,20 @@ function MyReportsContent() {
           {reports.map((report) => (
             <Card
               key={report.id}
-              className="p-4 bg-slate-900/60 border border-slate-800/80 hover:border-slate-700 transition-colors"
+              className="p-4 bg-white border border-slate-200/80 hover:border-slate-300 transition-colors shadow-sm"
             >
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div className="space-y-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-sm font-semibold text-white capitalize">
+                    <span className="text-sm font-bold text-slate-900 capitalize">
                       {report.category?.replace(/_/g, ' ') ?? 'Civic Issue'}
                     </span>
-                    <span className="text-[10px] font-mono text-slate-500">#{report.id.slice(0, 8)}</span>
+                    <span className="text-[10px] font-mono text-slate-400">#{report.id.slice(0, 8)}</span>
                   </div>
                   {report.description && (
-                    <p className="text-xs text-slate-400 truncate max-w-md">{report.description}</p>
+                    <p className="text-xs text-slate-600 truncate max-w-md">{report.description}</p>
                   )}
-                  <span className="text-[11px] text-slate-500">{formatDate(report.createdAt)}</span>
+                  <span className="text-[11px] text-slate-400">{formatDate(report.createdAt)}</span>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <StatusBadge type="status" value={report.status as IssueStatus} size="sm" />

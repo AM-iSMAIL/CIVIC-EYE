@@ -333,9 +333,9 @@ export default function ReportPage() {
         title="Report a Civic Issue"
         description="Capture real evidence of municipal hazards at the exact scene. Camera capture and browser GPS ensure verified citizen reports."
         badge={
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-950/60 text-emerald-300 border border-emerald-800/60">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-            Phase 5: Real Firestore Incident
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">
+            <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+            AI Urban Intelligence
           </span>
         }
         breadcrumbs={[
@@ -345,7 +345,7 @@ export default function ReportPage() {
       />
 
       {/* User Identity Banner */}
-      <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-emerald-950/30 border border-emerald-800/40 shadow-xs">
+      <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
         {currentUser.photoURL ? (
           <Image
             src={currentUser.photoURL}
@@ -354,18 +354,18 @@ export default function ReportPage() {
             height={32}
             unoptimized
             referrerPolicy="no-referrer"
-            className="w-8 h-8 rounded-full border border-emerald-700/60 shrink-0"
+            className="w-8 h-8 rounded-full border border-slate-200 shrink-0"
           />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center shrink-0">
-            <User className="w-4 h-4 text-slate-400" />
+          <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center shrink-0">
+            <User className="w-4 h-4 text-slate-500" />
           </div>
         )}
         <div className="flex-1 min-w-0">
-          <span className="text-sm text-emerald-200 font-medium block truncate">
+          <span className="text-sm text-slate-900 font-bold block truncate">
             Reporting as {currentUser.displayName ?? currentUser.email ?? 'Citizen'}
           </span>
-          <span className="text-[11px] text-slate-400 block truncate">
+          <span className="text-[11px] text-slate-500 block truncate">
             Evidence and GPS coordinates are preserved in client-side memory for verification.
           </span>
         </div>
@@ -381,8 +381,8 @@ export default function ReportPage() {
 
       {/* Timing Notice Banner */}
       {timingNotice && (
-        <div className="flex items-center gap-2 p-3 rounded-xl bg-cyan-950/40 border border-cyan-800/50 text-xs text-cyan-300 animate-pulse">
-          <Loader2 className="w-4 h-4 animate-spin shrink-0" />
+        <div className="flex items-center gap-2 p-3 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-800 animate-pulse">
+          <Loader2 className="w-4 h-4 animate-spin shrink-0 text-blue-600" />
           <span>{timingNotice}</span>
         </div>
       )}
@@ -410,22 +410,22 @@ export default function ReportPage() {
         <CameraCapture onPhotoCaptured={handlePhotoCaptured} />
       )}
 
-      {/* Associated Evidence & Location Summary Card (When Both Available) */}
+      {/* Associated Evidence & Location Summary Card */}
       {draft.photo && draft.location && (
-        <div className="p-4 rounded-xl bg-slate-900/90 border border-emerald-800/50 space-y-2 text-xs">
-          <div className="flex items-center gap-2 text-emerald-300 font-semibold">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+        <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-2 text-xs">
+          <div className="flex items-center gap-2 text-emerald-800 font-bold">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
             <span>Evidence & Location Associated</span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300 font-mono text-[11px] pt-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-600 font-mono text-[11px] pt-1">
             <div className="flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+              <MapPin className="w-3.5 h-3.5 text-blue-600 shrink-0" />
               <span>
                 GPS: {draft.location.latitude.toFixed(5)}°, {draft.location.longitude.toFixed(5)}° (±{draft.location.accuracy}m)
               </span>
             </div>
             <div className="flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
               <span>
                 Captured: {draft.capturedAt ? new Date(draft.capturedAt).toLocaleTimeString() : '--'}
               </span>
@@ -444,51 +444,51 @@ export default function ReportPage() {
           isAnalyzing={isAnalyzing}
         />
       ) : (
-        <Card className="border-slate-800 bg-slate-900/90 shadow-lg">
-          <CardHeader className="pb-3">
+        <Card className="border border-slate-200/80 bg-white shadow-sm">
+          <CardHeader className="pb-3 border-b border-slate-100">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm flex items-center gap-2 text-white">
-                <Sparkles className="w-4 h-4 text-emerald-400" />
+              <CardTitle className="text-sm flex items-center gap-2 text-slate-900 font-bold">
+                <Sparkles className="w-4 h-4 text-blue-600" />
                 STEP 3: Multimodal AI Defect Analysis
               </CardTitle>
               {hasPhoto && (
-                <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">
+                <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100 font-semibold">
                   Ready for AI
                 </span>
               )}
             </div>
-            <CardDescription className="text-xs">
+            <CardDescription className="text-xs text-slate-500">
               Google Gemini Multimodal Vision will inspect the captured evidence to automatically determine defect category, estimate severity score (1–10), and identify affected commuter groups.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 pt-4">
             {isAnalyzing ? (
-              <div className="p-6 rounded-xl bg-slate-950/60 border border-emerald-900/40 text-center space-y-3">
-                <div className="w-12 h-12 rounded-full bg-emerald-950/80 border border-emerald-600/60 flex items-center justify-center mx-auto">
-                  <Sparkles className="w-6 h-6 text-emerald-400 animate-pulse" />
+              <div className="p-6 rounded-2xl bg-blue-50/40 border border-blue-100 text-center space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center mx-auto text-blue-600">
+                  <Sparkles className="w-6 h-6 animate-pulse" />
                 </div>
                 <div className="space-y-1">
-                  <h4 className="text-sm font-semibold text-white">
+                  <h4 className="text-sm font-bold text-slate-900">
                     CivicEye AI is analyzing the image...
                   </h4>
-                  <p className="text-xs text-slate-400 max-w-md mx-auto">
+                  <p className="text-xs text-slate-500 max-w-md mx-auto">
                     Inspecting road surface, structural integrity, hazard severity, and municipal response requirements using Gemini Vision.
                   </p>
                 </div>
-                <div className="flex items-center justify-center gap-2 text-xs text-emerald-400 pt-1">
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                <div className="flex items-center justify-center gap-2 text-xs text-blue-700 pt-1 font-medium">
+                  <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
                   <span>Processing visual neural tokens</span>
                 </div>
               </div>
             ) : analysisError ? (
-              <div className="p-4 rounded-xl bg-rose-950/30 border border-rose-800/40 text-xs text-rose-300 space-y-3">
+              <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800 space-y-3">
                 <div className="flex items-start gap-2.5">
-                  <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+                  <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
                   <div className="space-y-1">
-                    <span className="font-semibold text-rose-200 block">
+                    <span className="font-bold text-rose-900 block">
                       Analysis Notice
                     </span>
-                    <p className="text-rose-300 leading-relaxed">{analysisError}</p>
+                    <p className="text-rose-700 leading-relaxed">{analysisError}</p>
                   </div>
                 </div>
                 <div className="flex justify-end pt-1">
@@ -505,8 +505,8 @@ export default function ReportPage() {
               </div>
             ) : hasPhoto ? (
               <div className="space-y-3">
-                <div className="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800 text-xs text-slate-300 flex items-center gap-3">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 flex items-center gap-3">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                   <span>
                     Photograph attached and ready. Click below to run AI visual triage.
                   </span>
@@ -519,14 +519,14 @@ export default function ReportPage() {
                   onClick={handleAnalyzeImage}
                   disabled={isAnalyzing}
                   leftIcon={<Sparkles className="w-4 h-4" />}
-                  className="w-full shadow-lg shadow-emerald-950/40 font-semibold"
+                  className="w-full font-semibold shadow-sm"
                 >
                   Analyze with CivicEye AI
                 </Button>
               </div>
             ) : (
-              <div className="p-4 rounded-xl bg-slate-950/40 border border-slate-800/80 text-xs text-slate-500 flex items-center gap-2.5">
-                <Info className="w-4 h-4 text-slate-500 shrink-0" />
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-500 flex items-center gap-2.5">
+                <Info className="w-4 h-4 text-slate-400 shrink-0" />
                 <span>
                   Please capture or upload photo evidence in Step 2 above to enable AI defect analysis.
                 </span>
@@ -536,7 +536,7 @@ export default function ReportPage() {
         </Card>
       )}
 
-      {/* STEP 4: PHASE 5 REAL FIRESTORE INCIDENT CREATION */}
+      {/* STEP 4: REAL FIRESTORE INCIDENT CREATION */}
       {draft.aiAnalysis && location ? (
         <ReportSummaryCard
           analysis={draft.aiAnalysis}
@@ -547,22 +547,22 @@ export default function ReportPage() {
           onSubmit={handleSubmitReport}
         />
       ) : (
-        <Card className="border-slate-800 bg-slate-900/60 opacity-80">
-          <CardHeader className="pb-3">
+        <Card className="border border-slate-200/80 bg-white shadow-xs opacity-80">
+          <CardHeader className="pb-3 border-b border-slate-100">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm flex items-center gap-2 text-slate-400">
-                <Send className="w-4 h-4 text-slate-500" />
+              <CardTitle className="text-sm flex items-center gap-2 text-slate-700 font-bold">
+                <Send className="w-4 h-4 text-slate-400" />
                 STEP 4: Review & Submit Civic Report
               </CardTitle>
-              <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">
+              <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 border border-slate-200 font-medium">
                 Awaiting Steps 1–3
               </span>
             </div>
-            <CardDescription className="text-xs">
+            <CardDescription className="text-xs text-slate-500">
               Final verification before submitting the incident to the municipal dispatch ledger.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-3 pt-4">
             <Button
               type="button"
               variant="primary"
@@ -573,7 +573,7 @@ export default function ReportPage() {
             >
               Submit Civic Report
             </Button>
-            <p className="text-[11px] text-slate-500 text-center">
+            <p className="text-[11px] text-slate-400 text-center">
               Complete Location, Photo Evidence, and AI Analysis above to enable incident submission.
             </p>
           </CardContent>

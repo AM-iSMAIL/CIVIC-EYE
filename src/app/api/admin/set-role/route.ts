@@ -1,17 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { doc, updateDoc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, updateDoc, getDoc, getDocs, collection, query, where, limit, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/services/firebase';
+import { isAdminEmail } from '@/config/roles';
 
 const ADMIN_SECRET = process.env.ADMIN_SETUP_SECRET || 'civiceye_admin_secret_dev';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { uid, role, secret } = body || {};
+    const { uid, email, role, secret } = body || {};
 
-    if (!uid || typeof uid !== 'string') {
+    if ((!uid || typeof uid !== 'string') && (!email || typeof email !== 'string')) {
       return NextResponse.json(
-        { success: false, error: 'Field "uid" (string) is required.' },
+        { success: false, error: 'Field "uid" or "email" (string) is required.' },
         { status: 400 }
       );
     }
@@ -23,8 +24,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Protect role elevation: verify admin setup secret
-    const isSecretValid = secret && secret === ADMIN_SECRET;
+    // Protect role elevation: verify admin setup secret or admin email match
+    const isSecretValid = (secret && secret === ADMIN_SECRET) || isAdminEmail(email);
 
     if (!isSecretValid) {
       return NextResponse.json(
@@ -40,7 +41,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const userRef = doc(db, 'users', uid);
+    let targetUid = uid;
+    if (!targetUid && email) {
+      const q = query(collection(db, 'users'), where('email', '==', email), limit(1));
+      const qSnap = await getDocs(q);
+      if (!qSnap.empty) {
+        targetUid = qSnap.docs[0].id;
+      } else {
+        return NextResponse.json(
+          { success: false, error: `User with email "${email}" not found.` },
+          { status: 404 }
+        );
+      }
+    }
+
+    const userRef = doc(db, 'users', targetUid);
     const snap = await getDoc(userRef);
 
     if (!snap.exists()) {
@@ -59,9 +74,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      uid,
+      uid: targetUid,
       role,
-      message: `User ${uid} successfully assigned role "${role}".`,
+      message: `User ${targetUid} successfully assigned role "${role}".`,
     });
   } catch (err: unknown) {
     console.error('[API /api/admin/set-role Error]:', err);

@@ -346,7 +346,7 @@ export const AdminMap: React.FC<AdminMapProps> = ({
   }, [displayClusters, markerLib, selectedCluster, onSelectCluster]);
 
   return (
-    <div className="relative w-full h-[650px] rounded-xl overflow-hidden border border-slate-800 bg-slate-900 shadow-2xl">
+    <div className="relative w-full h-[650px] rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-slate-100">
       <div ref={mapContainerRef} className="w-full h-full" />
 
       {/* Floating Action Controls */}
@@ -356,12 +356,12 @@ export const AdminMap: React.FC<AdminMapProps> = ({
           size="sm"
           onClick={locateAdmin}
           disabled={isLocating}
-          className="bg-slate-950/90 backdrop-blur-md border-slate-700 text-xs text-white shadow-xl hover:bg-slate-900"
+          className="bg-white/95 backdrop-blur-md border-slate-200 text-xs text-slate-800 shadow-md hover:bg-slate-50"
           leftIcon={
             isLocating ? (
-              <Loader2 className="w-3.5 h-3.5 animate-spin text-cyan-400" />
+              <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600" />
             ) : (
-              <Navigation className="w-3.5 h-3.5 text-cyan-400" />
+              <Navigation className="w-3.5 h-3.5 text-blue-600" />
             )
           }
         >
@@ -371,50 +371,50 @@ export const AdminMap: React.FC<AdminMapProps> = ({
         <button
           type="button"
           onClick={() => setShowDemoClusters(!showDemoClusters)}
-          className={`px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur-md border shadow-xl flex items-center gap-1.5 transition-all ${
+          className={`px-3 py-1.5 rounded-xl text-xs font-semibold backdrop-blur-md border shadow-md flex items-center gap-1.5 transition-all cursor-pointer ${
             showDemoClusters
-              ? 'bg-emerald-950/90 text-emerald-300 border-emerald-700/80 hover:bg-emerald-900'
-              : 'bg-slate-950/90 text-slate-400 border-slate-700 hover:text-white'
+              ? 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'
+              : 'bg-white/95 text-slate-600 border-slate-200 hover:text-slate-900'
           }`}
         >
-          <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+          <Sparkles className="w-3.5 h-3.5 text-blue-600" />
           <span>{showDemoClusters ? 'Demo Clusters: ON' : 'Demo Clusters: OFF'}</span>
         </button>
       </div>
 
       {/* Floating Tactical Legend Overlay */}
-      <div className="absolute top-3 right-3 z-10 p-3 rounded-xl bg-slate-950/90 backdrop-blur-md border border-slate-800 text-[11px] space-y-1.5 shadow-xl font-mono">
-        <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-1 mb-1">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300">
+      <div className="absolute top-3 right-3 z-10 p-3.5 rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200 text-[11px] space-y-1.5 shadow-md font-mono">
+        <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-1.5 mb-1.5">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-700 font-sans">
             Cluster Priority Legend
           </span>
-          <span className="text-[9px] text-emerald-400 font-bold px-1 py-0.2 rounded bg-emerald-950/80 border border-emerald-800">
+          <span className="text-[9px] text-blue-700 font-bold px-1.5 py-0.5 rounded-full bg-blue-50 border border-blue-100">
             {displayClusters.length} Active Pins
           </span>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse" />
-          <span className="text-cyan-300 font-semibold">Admin / HQ Location</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse" />
+          <span className="text-blue-700 font-bold">Admin HQ Location</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
-          <span className="text-slate-300">Critical (Score 75–100)</span>
+          <span className="text-slate-600">Critical (75–100)</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-orange-500" />
-          <span className="text-slate-300">High (Score 50–74)</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+          <span className="text-slate-600">High (50–74)</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-cyan-500" />
-          <span className="text-slate-300">Medium (Score 25–49)</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
+          <span className="text-slate-600">Medium (25–49)</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-          <span className="text-slate-300">Low (Score 0–24)</span>
+          <span className="text-slate-600">Low (0–24)</span>
         </div>
-        <div className="pt-1 border-t border-slate-800 text-[10px] text-slate-400">
-          *Numbers on pins denote corroborating reports
+        <div className="pt-1.5 border-t border-slate-100 text-[10px] text-slate-400 font-sans">
+          *Pin numbers denote reports
         </div>
       </div>
     </div>

@@ -48,7 +48,7 @@ export const ReportProgress: React.FC<ReportProgressProps> = ({
   ];
 
   return (
-    <div className="w-full bg-slate-900/80 border border-slate-800 rounded-xl p-3 sm:p-4 mb-6 shadow-md">
+    <div className="w-full bg-white border border-slate-200/80 rounded-2xl p-3 sm:p-4 mb-6 shadow-sm">
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
         {steps.map((s) => {
           const isComplete = s.status === 'complete';
@@ -58,33 +58,33 @@ export const ReportProgress: React.FC<ReportProgressProps> = ({
           return (
             <div
               key={s.id}
-              className={`flex items-center gap-2.5 p-2 rounded-lg transition-all ${
+              className={`flex items-center gap-2.5 p-2 rounded-xl transition-all ${
                 isComplete
-                  ? 'bg-emerald-950/40 border border-emerald-800/50 text-emerald-300'
+                  ? 'bg-emerald-50/80 border border-emerald-200 text-emerald-800'
                   : isActive
-                  ? 'bg-slate-800 border border-slate-700 text-white'
+                  ? 'bg-blue-50 border border-blue-200 text-blue-900'
                   : isUpcoming
-                  ? 'bg-slate-950/40 border border-slate-900 text-slate-500 opacity-60'
-                  : 'bg-slate-950/30 border border-slate-850 text-slate-400'
+                  ? 'bg-slate-50/50 border border-slate-100 text-slate-400 opacity-60'
+                  : 'bg-slate-50 border border-slate-200/70 text-slate-600'
               }`}
             >
               <div
                 className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 text-xs font-semibold ${
                   isComplete
-                    ? 'bg-emerald-500 text-slate-950 shadow-sm shadow-emerald-500/30'
+                    ? 'bg-emerald-600 text-white shadow-sm'
                     : isActive
-                    ? 'bg-emerald-950 border border-emerald-500/50 text-emerald-400'
-                    : 'bg-slate-900 border border-slate-800 text-slate-500'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'bg-white border border-slate-200 text-slate-400'
                 }`}
               >
                 {isComplete ? <Check className="w-4 h-4 stroke-[3]" /> : s.icon}
               </div>
 
               <div className="min-w-0 flex-1">
-                <span className="text-xs font-medium block truncate leading-tight">
+                <span className="text-xs font-bold block truncate leading-tight">
                   STEP {s.id}: {s.label}
                 </span>
-                <span className="text-[10px] text-slate-400 block truncate leading-tight mt-0.5">
+                <span className="text-[10px] text-slate-500 block truncate leading-tight mt-0.5 font-medium">
                   {s.desc}
                 </span>
               </div>

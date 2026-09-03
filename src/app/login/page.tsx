@@ -4,56 +4,56 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { CivicEyeLogo } from '@/components/splash/CivicEyeLogo';
-import { Loader2, AlertCircle } from 'lucide-react';
+import { Loader2, AlertCircle, Shield, User, ArrowRight } from 'lucide-react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db, auth } from '@/services/firebase';
+import { isAdminEmail } from '@/config/roles';
+
+type LoginMode = 'citizen' | 'admin';
 
 export default function LoginPage() {
   const router = useRouter();
   const { currentUser, loading, signInWithGoogle, isConfigured, error: authError, isAdmin } = useAuth();
+  const [mode, setMode] = useState<LoginMode>('citizen');
   const [isSigningIn, setIsSigningIn] = useState<boolean>(false);
   const [isRouting, setIsRouting] = useState<boolean>(false);
   const [localError, setLocalError] = useState<string | null>(null);
 
-  // Route user deterministically based on their verified role
-  const routeUserByRole = useCallback(
-    async (roleOverride?: string) => {
+  // Route user deterministically based on their verified role and selected mode
+  const routeUser = useCallback(
+    async (userEmail?: string | null) => {
       setIsRouting(true);
-      try {
-        let role = roleOverride;
+      const email = userEmail || currentUser?.email || auth?.currentUser?.email;
+      const userIsAdmin = isAdminEmail(email) || isAdmin;
 
-        // If no explicit override passed, query Firestore for highest accuracy
-        if (!role && auth?.currentUser && db) {
-          try {
-            const snap = await getDoc(doc(db, 'users', auth.currentUser.uid));
-            if (snap.exists()) {
-              role = snap.data()?.role;
-            }
-          } catch {
-            // Fallback to context if query fails
-            role = currentUser?.role;
-          }
-        }
-
-        const targetIsAdmin = role === 'admin' || isAdmin;
-        if (targetIsAdmin) {
+      if (mode === 'admin') {
+        if (userIsAdmin) {
           router.replace('/admin');
         } else {
-          router.replace('/');
+          setIsRouting(false);
+          setIsSigningIn(false);
+          setLocalError(
+            `Access Restricted: Account (${email || 'signed in'}) does not have municipal administrator clearance. Switch to Citizen Access to continue.`
+          );
         }
-      } catch {
+      } else {
+        // Citizen login mode always routes to citizen home
         router.replace('/');
       }
     },
-    [currentUser?.role, isAdmin, router]
+    [currentUser?.email, isAdmin, mode, router]
   );
 
-  // If already authenticated on arrival, automatically route to appropriate workspace
+  // If already authenticated and visits login, route according to role
   useEffect(() => {
     if (!loading && currentUser) {
-      routeUserByRole(currentUser.role);
+      if (isAdmin || isAdminEmail(currentUser.email)) {
+        router.replace('/admin');
+      } else {
+        router.replace('/');
+      }
     }
-  }, [loading, currentUser, routeUserByRole]);
+  }, [loading, currentUser, isAdmin, router]);
 
   const handleGoogleSignIn = async () => {
     setLocalError(null);
@@ -61,13 +61,12 @@ export default function LoginPage() {
     try {
       await signInWithGoogle();
 
-      // Immediately verify role from Firestore document to avoid stale cache or race condition
-      if (auth?.currentUser && db) {
-        const snap = await getDoc(doc(db, 'users', auth.currentUser.uid));
-        const role = snap.exists() ? snap.data()?.role : 'citizen';
-        await routeUserByRole(role);
+      // Check current user after popup
+      const loggedInEmail = auth?.currentUser?.email;
+      if (loggedInEmail) {
+        await routeUser(loggedInEmail);
       } else {
-        await routeUserByRole();
+        setIsSigningIn(false);
       }
     } catch (err: unknown) {
       console.error('[CivicEye Auth] Sign-in error:', err);
@@ -80,8 +79,8 @@ export default function LoginPage() {
   const displayError = localError || authError;
 
   return (
-    <div className="min-h-screen w-full bg-[#fcfdfd] text-slate-900 flex flex-col items-center justify-center p-4 sm:p-6 relative overflow-hidden font-sans select-none">
-      {/* Precision Class AI Background Grid */}
+    <div className="min-h-screen w-full bg-[#fbfcfd] text-slate-900 flex flex-col items-center justify-center p-4 sm:p-6 relative overflow-hidden font-sans select-none">
+      {/* Precision Light SaaS Background Grid */}
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.035]"
         style={{
@@ -93,8 +92,8 @@ export default function LoginPage() {
         }}
       />
 
-      {/* Subtle Radial Atmosphere */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[640px] h-[640px] bg-gradient-to-tr from-blue-500/[0.04] via-cyan-500/[0.02] to-transparent rounded-full blur-3xl pointer-events-none" />
+      {/* Subtle Blue/Cyan Ambient Radial */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-blue-500/[0.04] via-emerald-500/[0.02] to-transparent rounded-full blur-3xl pointer-events-none" />
 
       {/* Minimal Top-Left Brand Mark */}
       <div className="absolute top-6 left-6 sm:top-8 sm:left-10 z-20 flex items-center gap-3">
@@ -110,49 +109,117 @@ export default function LoginPage() {
       </div>
 
       {/* Centered Authentication Card */}
-      <main className="relative z-10 w-full max-w-[420px] mx-auto animate-in fade-in slide-in-from-bottom-3 duration-500">
-        <div className="bg-white rounded-3xl border border-slate-200/80 p-8 sm:p-11 shadow-[0_12px_40px_-8px_rgba(15,23,42,0.06),0_1px_3px_rgba(15,23,42,0.03)]">
-          {/* Subtle Logo Badge */}
-          <div className="w-12 h-12 mx-auto rounded-2xl bg-blue-50/80 border border-blue-100/80 flex items-center justify-center mb-6 text-blue-600 shadow-sm">
-            <CivicEyeLogo size={28} />
+      <main className="relative z-10 w-full max-w-[440px] mx-auto animate-in fade-in slide-in-from-bottom-3 duration-500">
+        <div className="bg-white rounded-3xl border border-slate-200/80 p-8 sm:p-10 shadow-[0_12px_40px_-8px_rgba(15,23,42,0.06),0_1px_3px_rgba(15,23,42,0.03)]">
+          {/* Mode Switcher: Citizen Login vs Admin Login */}
+          <div className="flex items-center p-1 bg-slate-100/90 rounded-2xl border border-slate-200/60 mb-7">
+            <button
+              type="button"
+              onClick={() => {
+                setMode('citizen');
+                setLocalError(null);
+              }}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-semibold transition-all duration-150 cursor-pointer ${
+                mode === 'citizen'
+                  ? 'bg-white text-slate-900 shadow-sm border border-slate-200/80'
+                  : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              <User className="w-3.5 h-3.5 text-blue-600" />
+              <span>Citizen Login</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setMode('admin');
+                setLocalError(null);
+              }}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-semibold transition-all duration-150 cursor-pointer ${
+                mode === 'admin'
+                  ? 'bg-white text-slate-900 shadow-sm border border-slate-200/80'
+                  : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              <Shield className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Admin Login</span>
+            </button>
+          </div>
+
+          {/* Icon Badge */}
+          <div className="w-12 h-12 mx-auto rounded-2xl bg-blue-50/80 border border-blue-100/80 flex items-center justify-center mb-5 text-blue-600 shadow-sm">
+            {mode === 'citizen' ? (
+              <CivicEyeLogo size={28} />
+            ) : (
+              <Shield className="w-6 h-6 text-blue-600" />
+            )}
           </div>
 
           {/* Heading & Subtitle */}
           <div className="text-center space-y-1.5">
-            <h1 className="text-2xl sm:text-[26px] font-extrabold text-slate-950 tracking-tight">
-              Civic Identity
+            <h1 className="text-2xl sm:text-[25px] font-extrabold text-slate-950 tracking-tight">
+              {mode === 'citizen' ? 'Citizen Identity' : 'Municipal Administrator'}
             </h1>
-            <p className="text-sm text-slate-500 font-normal leading-relaxed">
-              Your verified connection to the city.
+            <p className="text-xs sm:text-sm text-slate-500 font-normal leading-relaxed max-w-xs mx-auto">
+              {mode === 'citizen'
+                ? 'Your verified connection to the city. Submit reports, view maps, and track resolution progress.'
+                : 'Municipal operations clearance for incident triage, priority queues, and city dispatch.'}
             </p>
           </div>
 
+          {/* Admin Clearance Badge */}
+          {mode === 'admin' && (
+            <div className="mt-4 p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 text-[11px] text-slate-600 flex items-center justify-center gap-2 text-center">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Authorized municipal operators (e.g. <span className="font-mono font-medium text-slate-900">amismail164@gmail.com</span>)</span>
+            </div>
+          )}
+
           {/* Error Alert */}
           {displayError && (
-            <div className="mt-6 p-3.5 rounded-xl bg-rose-50 border border-rose-200/70 text-xs text-rose-700 flex items-start gap-2.5">
+            <div className="mt-5 p-3.5 rounded-xl bg-rose-50 border border-rose-200/70 text-xs text-rose-700 flex items-start gap-2.5">
               <AlertCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-              <span className="leading-relaxed">{displayError}</span>
+              <div className="space-y-1.5 flex-1">
+                <p className="leading-relaxed">{displayError}</p>
+                {mode === 'admin' && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMode('citizen');
+                      setLocalError(null);
+                    }}
+                    className="text-xs font-semibold text-blue-600 hover:text-blue-800 underline inline-flex items-center gap-1 cursor-pointer"
+                  >
+                    <span>Switch to Citizen Access</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </button>
+                )}
+              </div>
             </div>
           )}
 
           {/* Unconfigured Alert */}
           {!isConfigured && (
-            <div className="mt-6 p-3.5 rounded-xl bg-amber-50 border border-amber-200/70 text-xs text-amber-800 flex items-start gap-2.5">
+            <div className="mt-5 p-3.5 rounded-xl bg-amber-50 border border-amber-200/70 text-xs text-amber-800 flex items-start gap-2.5">
               <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-              <span>Authentication configuration is pending.</span>
+              <span>Authentication configuration is pending in environment.</span>
             </div>
           )}
 
-          {/* Action Area */}
-          <div className="mt-8 space-y-4">
+          {/* Prominent Action Button */}
+          <div className="mt-7 space-y-3.5">
             <button
               type="button"
               onClick={handleGoogleSignIn}
               disabled={isSigningIn || isRouting || !isConfigured}
-              className="w-full h-12 flex items-center justify-center gap-3 px-4 rounded-xl border border-slate-200/90 bg-white hover:bg-slate-50 hover:border-slate-300 text-slate-800 text-sm font-semibold shadow-sm hover:shadow transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+              className={`w-full h-12 flex items-center justify-center gap-3 px-4 rounded-xl border text-sm font-semibold shadow-sm transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer ${
+                mode === 'admin'
+                  ? 'border-blue-600 bg-blue-600 hover:bg-blue-700 text-white hover:shadow-md'
+                  : 'border-slate-200/90 bg-white hover:bg-slate-50 hover:border-slate-300 text-slate-800 hover:shadow'
+              }`}
             >
               {isSigningIn || isRouting ? (
-                <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+                <Loader2 className={`w-4 h-4 animate-spin ${mode === 'admin' ? 'text-white' : 'text-blue-600'}`} />
               ) : (
                 <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
                   <path
@@ -175,10 +242,14 @@ export default function LoginPage() {
               )}
               <span>
                 {isRouting
-                  ? 'Connecting to workspace...'
+                  ? mode === 'admin'
+                    ? 'Entering Command Center...'
+                    : 'Opening Civic Portal...'
                   : isSigningIn
                   ? 'Verifying credential...'
-                  : 'Continue with Google'}
+                  : mode === 'admin'
+                  ? 'Sign In as Administrator'
+                  : 'Continue as Citizen'}
               </span>
             </button>
 

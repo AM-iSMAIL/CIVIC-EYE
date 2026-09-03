@@ -19,6 +19,7 @@ import {
   Loader2,
   FileText,
   Bell,
+  UserCircle2,
 } from 'lucide-react';
 import { Button } from './Button';
 import { CivicEyeLogo } from '@/components/splash/CivicEyeLogo';
@@ -36,6 +37,8 @@ const getNavIcon = (href: string) => {
       return <FileText className="w-4 h-4" />;
     case '/notifications':
       return <Bell className="w-4 h-4" />;
+    case '/profile':
+      return <UserCircle2 className="w-4 h-4" />;
     default:
       return <Activity className="w-4 h-4" />;
   }
@@ -47,15 +50,14 @@ export const Navbar: React.FC = () => {
   const { currentUser, loading, signInWithGoogle, signOut } = useAuth();
 
   // Always use citizen nav items — this Navbar is never shown on /admin/* routes
-  // (RootShell suppresses it there). So we only need citizenNavItems here.
   const navItems = siteConfig.citizenNavItems;
 
-  /* ── Shared desktop user section ── */
+  /* ── Desktop User Section ── */
   const renderUserSection = () => {
     if (loading) {
       return (
         <div className="flex items-center gap-2 px-3 py-2 text-sm text-slate-400">
-          <Loader2 className="w-4 h-4 animate-spin" />
+          <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
         </div>
       );
     }
@@ -64,7 +66,10 @@ export const Navbar: React.FC = () => {
       return (
         <div className="flex items-center gap-3">
           {/* User Avatar & Name */}
-          <div className="flex items-center gap-2">
+          <Link
+            href="/profile"
+            className="flex items-center gap-2 px-2 py-1 rounded-xl hover:bg-slate-100 transition-colors"
+          >
             {currentUser.photoURL ? (
               <Image
                 src={currentUser.photoURL}
@@ -73,17 +78,17 @@ export const Navbar: React.FC = () => {
                 height={28}
                 unoptimized
                 referrerPolicy="no-referrer"
-                className="w-7 h-7 rounded-full border border-slate-700"
+                className="w-7 h-7 rounded-full border border-slate-200"
               />
             ) : (
-              <div className="w-7 h-7 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center">
-                <User className="w-3.5 h-3.5 text-slate-400" />
+              <div className="w-7 h-7 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center">
+                <User className="w-3.5 h-3.5 text-slate-500" />
               </div>
             )}
-            <span className="text-xs text-slate-300 font-medium max-w-[100px] truncate hidden lg:inline">
+            <span className="text-xs text-slate-700 font-medium max-w-[110px] truncate hidden lg:inline">
               {currentUser.displayName ?? currentUser.email ?? 'Citizen'}
             </span>
-          </div>
+          </Link>
 
           {/* Sign Out */}
           <Button
@@ -99,24 +104,25 @@ export const Navbar: React.FC = () => {
     }
 
     return (
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={signInWithGoogle}
-        leftIcon={<LogIn className="w-3.5 h-3.5 text-emerald-400" />}
-      >
-        Sign in
-      </Button>
+      <Link href="/login">
+        <Button
+          variant="outline"
+          size="sm"
+          leftIcon={<LogIn className="w-3.5 h-3.5 text-blue-600" />}
+        >
+          Sign in
+        </Button>
+      </Link>
     );
   };
 
-  /* ── Mobile user section ── */
+  /* ── Mobile User Section ── */
   const renderMobileUserSection = () => {
     if (loading) {
       return (
         <div className="flex items-center justify-center gap-2 py-3 text-sm text-slate-400">
-          <Loader2 className="w-4 h-4 animate-spin" />
-          <span>Checking credentials...</span>
+          <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+          <span>Verifying identity...</span>
         </div>
       );
     }
@@ -125,7 +131,11 @@ export const Navbar: React.FC = () => {
       return (
         <div className="space-y-3">
           {/* User Profile Row */}
-          <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-800/60 border border-slate-700/60">
+          <Link
+            href="/profile"
+            onClick={() => setIsOpen(false)}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200"
+          >
             {currentUser.photoURL ? (
               <Image
                 src={currentUser.photoURL}
@@ -134,27 +144,27 @@ export const Navbar: React.FC = () => {
                 height={32}
                 unoptimized
                 referrerPolicy="no-referrer"
-                className="w-8 h-8 rounded-full border border-slate-600"
+                className="w-8 h-8 rounded-full border border-slate-200"
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center">
-                <User className="w-4 h-4 text-slate-400" />
+              <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center">
+                <User className="w-4 h-4 text-slate-500" />
               </div>
             )}
             <div className="flex-1 min-w-0">
-              <span className="text-sm text-white font-medium block truncate">
+              <span className="text-sm text-slate-900 font-semibold block truncate">
                 {currentUser.displayName ?? 'Citizen'}
               </span>
-              <span className="text-[11px] text-slate-400 block truncate">
+              <span className="text-[11px] text-slate-500 block truncate">
                 {currentUser.email ?? ''}
               </span>
             </div>
-          </div>
+          </Link>
 
           <Button
             variant="ghost"
             size="sm"
-            className="w-full justify-center"
+            className="w-full justify-center text-slate-600 hover:text-slate-900"
             onClick={() => {
               signOut();
               setIsOpen(false);
@@ -168,42 +178,40 @@ export const Navbar: React.FC = () => {
     }
 
     return (
-      <Button
-        variant="outline"
-        size="md"
-        className="w-full"
-        onClick={() => {
-          signInWithGoogle();
-          setIsOpen(false);
-        }}
-        leftIcon={<LogIn className="w-4 h-4 text-emerald-400" />}
-      >
-        Sign in with Google
-      </Button>
+      <Link href="/login" onClick={() => setIsOpen(false)} className="block w-full">
+        <Button
+          variant="outline"
+          size="md"
+          className="w-full justify-center"
+          leftIcon={<LogIn className="w-4 h-4 text-blue-600" />}
+        >
+          Sign in with Google
+        </Button>
+      </Link>
     );
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-slate-950/75 backdrop-blur-md transition-all">
+    <header className="sticky top-0 z-50 w-full border-b border-slate-200/80 bg-white/85 backdrop-blur-md transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Brand Logo */}
           <Link
             href="/"
-            className="flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-lg p-1"
+            className="flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-lg p-1"
           >
             <CivicEyeLogo size={32} />
             <div className="flex flex-col">
-              <span className="text-lg font-bold tracking-tight text-white flex items-center gap-1.5">
-                CIVIC<span className="text-blue-500">EYE</span>
+              <span className="text-lg font-black tracking-tight text-slate-950 flex items-center gap-1.5">
+                CIVIC<span className="text-blue-600">EYE</span>
               </span>
-              <span className="text-[10px] text-slate-400 font-medium tracking-wide uppercase">
+              <span className="text-[9px] text-slate-400 font-medium tracking-[0.16em] uppercase">
                 AI Urban Intelligence
               </span>
             </div>
           </Link>
 
-          {/* Desktop Navigation Links — citizen nav only */}
+          {/* Desktop Navigation Links — Citizen Navigation */}
           <nav className="hidden md:flex items-center gap-1" aria-label="Main Navigation">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
@@ -211,10 +219,10 @@ export const Navbar: React.FC = () => {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-150 ${
+                  className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-150 ${
                     isActive
-                      ? 'bg-slate-800 text-emerald-400 shadow-inner'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-900/80'
+                      ? 'bg-blue-50 text-blue-600 font-semibold border border-blue-100 shadow-sm'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                   }`}
                 >
                   {getNavIcon(item.href)}
@@ -244,11 +252,11 @@ export const Navbar: React.FC = () => {
           <div className="flex md:hidden items-center gap-2">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+              className="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
               aria-label={isOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isOpen}
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
@@ -256,7 +264,7 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Drawer */}
       {isOpen && (
-        <div className="md:hidden border-b border-slate-800 bg-slate-950/95 backdrop-blur-xl px-4 pt-3 pb-6 space-y-2 animate-in slide-in-from-top duration-200">
+        <div className="md:hidden border-b border-slate-200 bg-white/95 backdrop-blur-xl px-4 pt-3 pb-6 space-y-2 animate-in slide-in-from-top duration-200 shadow-lg">
           <nav className="space-y-1" aria-label="Mobile Navigation">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
@@ -265,10 +273,10 @@ export const Navbar: React.FC = () => {
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                     isActive
-                      ? 'bg-slate-800/90 text-emerald-400 font-semibold'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-900'
+                      ? 'bg-blue-50 text-blue-600 font-semibold border border-blue-100'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                   }`}
                 >
                   {getNavIcon(item.href)}
@@ -283,7 +291,7 @@ export const Navbar: React.FC = () => {
             })}
           </nav>
 
-          <div className="pt-4 border-t border-slate-800/80 space-y-3">
+          <div className="pt-4 border-t border-slate-100 space-y-3">
             <Link href="/report" onClick={() => setIsOpen(false)} className="block w-full">
               <Button
                 variant="primary"
@@ -291,7 +299,7 @@ export const Navbar: React.FC = () => {
                 className="w-full"
                 leftIcon={<PlusCircle className="w-4 h-4" />}
               >
-                Report an Issue Now
+                Report an Issue
               </Button>
             </Link>
 

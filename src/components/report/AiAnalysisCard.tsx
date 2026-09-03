@@ -41,38 +41,37 @@ export const AiAnalysisCard: React.FC<AiAnalysisCardProps> = ({
 
   const activeCategory = userCategoryOverride || analysis.category;
   const confidencePercent = Math.round(analysis.confidence * 100);
-  const hazardStyle = HAZARD_COLORS[analysis.hazardLevel] || HAZARD_COLORS.medium;
 
-  const getSeverityColor = (score: number) => {
-    if (score >= 8) return 'bg-rose-500 text-rose-300';
-    if (score >= 6) return 'bg-orange-500 text-orange-300';
-    if (score >= 4) return 'bg-amber-500 text-amber-300';
-    return 'bg-emerald-500 text-emerald-300';
+  const getSeverityBarColor = (score: number) => {
+    if (score >= 8) return 'bg-rose-500';
+    if (score >= 6) return 'bg-orange-500';
+    if (score >= 4) return 'bg-amber-500';
+    return 'bg-emerald-500';
   };
 
   return (
-    <div className="bg-slate-900/90 border border-emerald-800/60 rounded-2xl p-5 sm:p-6 shadow-xl space-y-5">
+    <div className="bg-white border border-slate-200/80 rounded-2xl p-5 sm:p-6 shadow-sm space-y-5">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800/80 gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-700/80 flex items-center justify-center text-emerald-400">
+          <div className="w-8 h-8 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
             <Sparkles className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-white tracking-wide uppercase flex items-center gap-2">
+            <h3 className="text-sm font-bold text-slate-950 tracking-wide uppercase flex items-center gap-2">
               STEP 3: CivicEye AI Analysis
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
                 Verified
               </span>
             </h3>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500">
               Multimodal defect classification & hazard assessment
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 self-end sm:self-auto">
-          <span className="text-xs font-mono px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-emerald-300">
+          <span className="text-xs font-mono px-2.5 py-1 rounded-xl bg-slate-50 border border-slate-200 text-slate-700">
             {confidencePercent}% Confidence
           </span>
           <Button
@@ -91,51 +90,49 @@ export const AiAnalysisCard: React.FC<AiAnalysisCardProps> = ({
       {/* Primary Intelligence Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {/* Category */}
-        <div className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800/80 space-y-1">
-          <span className="text-[10px] text-slate-400 uppercase tracking-wider block font-sans">
+        <div className="p-3.5 rounded-xl bg-slate-50/70 border border-slate-100 space-y-1">
+          <span className="text-[10px] text-slate-400 uppercase tracking-wider block font-medium">
             Detected Category
           </span>
           <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold text-white">
+            <span className="text-sm font-bold text-slate-900">
               {CATEGORY_LABELS[activeCategory] || activeCategory}
             </span>
             {userCategoryOverride && (
-              <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">
-                User Modified
+              <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
+                Modified
               </span>
             )}
           </div>
         </div>
 
         {/* Severity */}
-        <div className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800/80 space-y-1">
+        <div className="p-3.5 rounded-xl bg-slate-50/70 border border-slate-100 space-y-1">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] text-slate-400 uppercase tracking-wider font-sans">
+            <span className="text-[10px] text-slate-400 uppercase tracking-wider font-medium">
               Severity Rating
             </span>
-            <span className="text-xs font-bold font-mono text-white">
+            <span className="text-xs font-bold font-mono text-slate-900">
               {analysis.severity} / 10
             </span>
           </div>
           {/* Visual severity meter */}
-          <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden mt-1.5">
+          <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden mt-1.5">
             <div
-              className={`h-full rounded-full ${getSeverityColor(analysis.severity).split(' ')[0]}`}
+              className={`h-full rounded-full ${getSeverityBarColor(analysis.severity)}`}
               style={{ width: `${(analysis.severity / 10) * 100}%` }}
             />
           </div>
         </div>
 
         {/* Hazard Level */}
-        <div className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800/80 space-y-1">
-          <span className="text-[10px] text-slate-400 uppercase tracking-wider block font-sans">
+        <div className="p-3.5 rounded-xl bg-slate-50/70 border border-slate-100 space-y-1">
+          <span className="text-[10px] text-slate-400 uppercase tracking-wider block font-medium">
             Hazard Level
           </span>
           <div className="flex items-center gap-1.5 pt-0.5">
-            <ShieldAlert className="w-4 h-4 text-slate-400" />
-            <span
-              className={`text-xs font-semibold uppercase px-2 py-0.5 rounded border ${hazardStyle.bg} ${hazardStyle.text} ${hazardStyle.border}`}
-            >
+            <ShieldAlert className="w-4 h-4 text-slate-500" />
+            <span className="text-xs font-bold uppercase text-slate-800">
               {analysis.hazardLevel}
             </span>
           </div>
@@ -143,9 +140,9 @@ export const AiAnalysisCard: React.FC<AiAnalysisCardProps> = ({
       </div>
 
       {/* Affected User Groups */}
-      <div className="p-3.5 rounded-xl bg-slate-950/40 border border-slate-800/70 space-y-2">
-        <div className="flex items-center gap-2 text-xs font-semibold text-slate-300">
-          <Users className="w-3.5 h-3.5 text-emerald-400" />
+      <div className="p-3.5 rounded-xl bg-slate-50/70 border border-slate-100 space-y-2">
+        <div className="flex items-center gap-2 text-xs font-bold text-slate-800">
+          <Users className="w-3.5 h-3.5 text-blue-600" />
           <span>Affected Citizens & Commuters</span>
         </div>
         <div className="flex flex-wrap gap-1.5">
@@ -153,44 +150,44 @@ export const AiAnalysisCard: React.FC<AiAnalysisCardProps> = ({
             analysis.affectedUsers.map((group) => (
               <span
                 key={group}
-                className="text-xs px-2.5 py-1 rounded-md bg-slate-900 border border-slate-700/80 text-slate-200"
+                className="text-xs px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 shadow-2xs font-medium"
               >
                 {AFFECTED_USER_LABELS[group] || group}
               </span>
             ))
           ) : (
-            <span className="text-xs text-slate-500">None identified</span>
+            <span className="text-xs text-slate-400">None identified</span>
           )}
         </div>
       </div>
 
       {/* Visible Evidence Description */}
-      <div className="p-3.5 rounded-xl bg-slate-950/40 border border-slate-800/70 space-y-1.5">
-        <div className="flex items-center gap-2 text-xs font-semibold text-slate-300">
-          <FileText className="w-3.5 h-3.5 text-cyan-400" />
+      <div className="p-3.5 rounded-xl bg-slate-50/70 border border-slate-100 space-y-1.5">
+        <div className="flex items-center gap-2 text-xs font-bold text-slate-800">
+          <FileText className="w-3.5 h-3.5 text-blue-600" />
           <span>Visible Evidence Description</span>
         </div>
-        <p className="text-xs text-slate-300 leading-relaxed">
+        <p className="text-xs text-slate-600 leading-relaxed">
           {analysis.description}
         </p>
       </div>
 
       {/* Recommended Municipal Action */}
-      <div className="p-3.5 rounded-xl bg-emerald-950/20 border border-emerald-800/40 space-y-1.5">
-        <div className="flex items-center gap-2 text-xs font-semibold text-emerald-300">
-          <Wrench className="w-3.5 h-3.5 text-emerald-400" />
+      <div className="p-3.5 rounded-xl bg-emerald-50/50 border border-emerald-100 space-y-1.5">
+        <div className="flex items-center gap-2 text-xs font-bold text-emerald-800">
+          <Wrench className="w-3.5 h-3.5 text-emerald-600" />
           <span>Recommended Civic Response</span>
         </div>
-        <p className="text-xs text-emerald-200/90 leading-relaxed">
+        <p className="text-xs text-emerald-800/90 leading-relaxed font-medium">
           {analysis.recommendedAction}
         </p>
       </div>
 
       {/* Citizen Verification & Category Override Strip */}
-      <div className="pt-2 border-t border-slate-800/80 space-y-3">
+      <div className="pt-2 border-t border-slate-100 space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div className="flex items-center gap-2 text-xs text-slate-300">
-            <HelpCircle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+          <div className="flex items-center gap-2 text-xs text-slate-600">
+            <HelpCircle className="w-3.5 h-3.5 text-blue-600 shrink-0" />
             <span>Is this classification accurate?</span>
           </div>
 
@@ -202,7 +199,7 @@ export const AiAnalysisCard: React.FC<AiAnalysisCardProps> = ({
                   variant="outline"
                   size="sm"
                   onClick={() => setIsConfirmedAccurate(true)}
-                  leftIcon={<CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />}
+                  leftIcon={<CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />}
                   className="text-xs"
                 >
                   Yes, looks accurate
@@ -213,14 +210,14 @@ export const AiAnalysisCard: React.FC<AiAnalysisCardProps> = ({
                   size="sm"
                   onClick={() => setShowOverrideDropdown(!showOverrideDropdown)}
                   rightIcon={<ChevronDown className="w-3 h-3 text-slate-400" />}
-                  className="text-xs text-slate-400 hover:text-white"
+                  className="text-xs text-slate-600 hover:text-slate-900"
                 >
                   Change Category
                 </Button>
               </>
             ) : (
               <div className="flex items-center gap-2">
-                <span className="text-xs text-emerald-400 flex items-center gap-1 font-medium">
+                <span className="text-xs text-emerald-600 flex items-center gap-1 font-bold">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   {userCategoryOverride ? 'Category updated' : 'Confirmed accurate'}
                 </span>
@@ -230,7 +227,7 @@ export const AiAnalysisCard: React.FC<AiAnalysisCardProps> = ({
                     setIsConfirmedAccurate(false);
                     setShowOverrideDropdown(true);
                   }}
-                  className="text-[11px] text-slate-400 hover:text-slate-200 underline ml-1"
+                  className="text-[11px] text-blue-600 hover:text-blue-800 underline ml-1 cursor-pointer"
                 >
                   Change
                 </button>
@@ -241,11 +238,11 @@ export const AiAnalysisCard: React.FC<AiAnalysisCardProps> = ({
 
         {/* Change Category Dropdown Selector */}
         {showOverrideDropdown && (
-          <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-            <label className="text-xs font-semibold text-slate-300 block">
+          <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+            <label className="text-xs font-bold text-slate-800 block">
               Select Alternate Category:
             </label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {CIVIC_CATEGORIES.map((cat) => (
                 <button
                   key={cat}
@@ -255,10 +252,10 @@ export const AiAnalysisCard: React.FC<AiAnalysisCardProps> = ({
                     setShowOverrideDropdown(false);
                     setIsConfirmedAccurate(true);
                   }}
-                  className={`text-xs px-2.5 py-1.5 rounded-lg text-left transition-all border ${
+                  className={`text-xs px-3 py-2 rounded-xl text-left transition-all border cursor-pointer ${
                     activeCategory === cat
-                      ? 'bg-emerald-950/80 border-emerald-600 text-emerald-200 font-semibold'
-                      : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-850 hover:text-white'
+                      ? 'bg-blue-50 border-blue-600 text-blue-700 font-bold shadow-2xs'
+                      : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'
                   }`}
                 >
                   {CATEGORY_LABELS[cat]}

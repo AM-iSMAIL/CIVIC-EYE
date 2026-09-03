@@ -104,6 +104,13 @@ CivicEye is an AI-powered civic issue reporting and city intelligence platform. 
 - [x] Phase 7: Duplicate detection & priority clustering
 - [x] Phase 8: Admin Command Center (Role-based access control, live Firestore dashboard, incident management table, priority queue, tactical map, municipal analytics, status transitions)
 - [x] Phase 9: Strict Role-Based UI Separation (citizenNavItems vs adminNavItems, RootShell suppresses Navbar/Footer on /admin/*, AdminGuard hard-redirects citizens, CitizenGuard hard-redirects admins, My Reports page, Notifications page)
+- [x] Phase 10: Dedicated Class AI Authentication Screen (RootShell suppresses Navbar/Footer on /login, minimal top-left brand mark, centered Civic Identity card, single Continue with Google button, automatic backend role routing)
+- [x] Phase 11: Light SaaS Design System Overhaul & Dual-Option Authentication
+  - Unified Light Theme: Pure off-white backgrounds (`#fbfcfd`), deep charcoal/navy text (`#090d16`), electric blue accent (`#2563eb`), subtle green resolved states (`#10b981`), thin light gray borders (`#e2e8f0`), soft shadows.
+  - Eradicated dark default themes, purple/neon AI glows, heavy shadows, and visual clutter across the entire codebase.
+  - Redesigned all surfaces: Splash screen, Dual Citizen/Admin Login card (`/login`), Citizen Home (`/`), Reporting Wizard steps 1-4 (`/report`), Civic Map (`/map`), Citizen History (`/my-reports`, `/notifications`), Citizen Profile (`/profile`), and Admin Command Center (`/admin`, `/admin/incidents`, `/admin/map`, `/admin/analytics`, `/admin/hub`).
+  - Implemented Dual Citizen / Admin login mode switcher on `/login` with real-time municipal verification.
+  - Configured immediate Superadmin clearance for `amismail164@gmail.com` in `roles.ts`, `auth.ts`, `firestore.ts`, and `AuthContext.tsx`.
 - [x] UI/UX: Futuristic AI Loading/Splash Screen & Identity Portal (Class AI white design language, geometric AI eye symbol, 60fps cinematic sequence, auto-transition)
 
 ---

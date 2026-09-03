@@ -39,22 +39,21 @@ export const ReportSummaryCard: React.FC<ReportSummaryCardProps> = ({
   onSubmit,
 }) => {
   const finalCategory = userCategoryOverride || analysis.category;
-  const hazardStyle = HAZARD_COLORS[analysis.hazardLevel] || HAZARD_COLORS.medium;
   const isOverridden = Boolean(userCategoryOverride && userCategoryOverride !== analysis.category);
 
   return (
-    <Card className="border-emerald-800/60 bg-slate-900/95 shadow-xl space-y-2">
-      <CardHeader className="pb-3 border-b border-slate-800/80">
+    <Card className="border border-slate-200/80 bg-white shadow-sm space-y-2">
+      <CardHeader className="pb-3 border-b border-slate-100">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-sm font-bold text-white uppercase tracking-wide flex items-center gap-2">
-            <Send className="w-4 h-4 text-emerald-400" />
+          <CardTitle className="text-sm font-bold text-slate-950 uppercase tracking-wide flex items-center gap-2">
+            <Send className="w-4 h-4 text-blue-600" />
             STEP 4: Review & Submit Civic Report
           </CardTitle>
-          <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800">
+          <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100 font-semibold">
             Ready to Dispatch
           </span>
         </div>
-        <CardDescription className="text-xs text-slate-400">
+        <CardDescription className="text-xs text-slate-500">
           Verify your civic incident summary before persisting to the municipal ledger.
         </CardDescription>
       </CardHeader>
@@ -63,59 +62,57 @@ export const ReportSummaryCard: React.FC<ReportSummaryCardProps> = ({
         {/* Concise Overview Strip */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
           {/* Issue Category */}
-          <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800 space-y-1">
-            <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
+          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 space-y-1">
+            <span className="text-[10px] text-slate-400 uppercase tracking-wider block font-medium">
               Issue Category
             </span>
             <div className="flex items-center gap-1.5">
-              <FileCheck2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-              <span className="text-xs font-semibold text-white truncate">
+              <FileCheck2 className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+              <span className="text-xs font-bold text-slate-900 truncate">
                 {CATEGORY_LABELS[finalCategory] || finalCategory}
               </span>
             </div>
             {isOverridden && (
-              <span className="text-[9px] text-cyan-400 block font-mono">
+              <span className="text-[9px] text-blue-600 block font-mono">
                 User corrected
               </span>
             )}
           </div>
 
           {/* Severity */}
-          <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800 space-y-1">
-            <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
+          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 space-y-1">
+            <span className="text-[10px] text-slate-400 uppercase tracking-wider block font-medium">
               Severity
             </span>
-            <span className="text-xs font-bold font-mono text-white block">
+            <span className="text-xs font-bold font-mono text-slate-900 block">
               {analysis.severity} / 10
             </span>
-            <span className="text-[9px] text-slate-500 block">
+            <span className="text-[9px] text-slate-400 block font-medium">
               Visible risk rating
             </span>
           </div>
 
           {/* Hazard Level */}
-          <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800 space-y-1">
-            <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
+          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 space-y-1">
+            <span className="text-[10px] text-slate-400 uppercase tracking-wider block font-medium">
               Hazard Level
             </span>
             <div className="flex items-center gap-1 pt-0.5">
               <ShieldAlert className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-              <span
-                className={`text-[11px] font-bold uppercase px-1.5 py-0.5 rounded border ${hazardStyle.bg} ${hazardStyle.text} ${hazardStyle.border}`}
-              >
+              <span className="text-[11px] font-bold uppercase text-slate-800">
                 {analysis.hazardLevel}
               </span>
             </div>
           </div>
 
           {/* GPS Location */}
-          <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800 space-y-1">
-            <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
+          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 space-y-1">
+            <span className="text-[10px] text-slate-400 uppercase tracking-wider block font-medium">
               GPS Location
             </span>
-            <div className="flex items-center gap-1 text-emerald-300">
-              <MapPin className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-              <span className="text-xs font-medium truncate">
+            <div className="flex items-center gap-1 text-emerald-700">
+              <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              <span className="text-xs font-bold truncate">
                 Captured (±{location.accuracy}m)
               </span>
             </div>
@@ -126,30 +123,30 @@ export const ReportSummaryCard: React.FC<ReportSummaryCardProps> = ({
         </div>
 
         {/* AI Confirmation Status Strip */}
-        <div className="flex items-center justify-between p-3 rounded-xl bg-slate-950/40 border border-slate-800/70 text-xs">
+        <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs">
           <div className="flex items-center gap-2">
             {isOverridden ? (
-              <Edit3 className="w-4 h-4 text-cyan-400" />
+              <Edit3 className="w-4 h-4 text-blue-600" />
             ) : (
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
             )}
-            <span className="text-slate-300">
+            <span className="text-slate-700">
               AI Analysis Status:{' '}
-              <strong className={isOverridden ? 'text-cyan-300' : 'text-emerald-300'}>
+              <strong className={isOverridden ? 'text-blue-700' : 'text-emerald-700'}>
                 {isOverridden ? 'User corrected category' : 'Confirmed accurate'}
               </strong>
             </span>
           </div>
 
-          <span className="text-[11px] text-slate-500 font-mono hidden sm:inline">
+          <span className="text-[11px] text-slate-400 font-mono hidden sm:inline">
             Status: reported
           </span>
         </div>
 
         {/* Submission Error Banner */}
         {submitError && (
-          <div className="p-3.5 rounded-xl bg-rose-950/40 border border-rose-800/60 text-xs text-rose-300 flex items-start gap-2.5">
-            <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+          <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-start gap-2.5">
+            <AlertCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
             <span>{submitError}</span>
           </div>
         )}
@@ -168,7 +165,7 @@ export const ReportSummaryCard: React.FC<ReportSummaryCardProps> = ({
               <Send className="w-4 h-4" />
             )
           }
-          className="w-full shadow-lg shadow-emerald-950/50 font-semibold"
+          className="w-full font-semibold shadow-sm hover:shadow"
         >
           {isSubmitting ? 'Submitting civic report...' : 'Submit Civic Report'}
         </Button>

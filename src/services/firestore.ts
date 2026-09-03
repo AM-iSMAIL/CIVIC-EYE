@@ -30,6 +30,7 @@ import {
   type IssueStatus,
   validateIncidentPayload,
 } from '@/types/incident';
+import { isAdminEmail } from '@/config/roles';
 
 // Local storage key for fallback when Firestore is unconfigured
 const LOCAL_INCIDENTS_KEY = 'civiceye_local_incidents';
@@ -56,7 +57,10 @@ function saveLocalIncidents(incidents: IncidentReport[]): void {
 /**
  * Sync a Firebase Auth user to the Firestore users/{uid} document.
  */
-export async function syncUserToFirestore(user: User): Promise<void> {
+export async function syncUserToFirestore(
+  user: User,
+  intendedRole?: 'admin' | 'citizen'
+): Promise<void> {
   if (!db) {
     console.warn('[CivicEye Firestore] Firestore not configured. Skipping user sync.');
     return;
@@ -67,6 +71,7 @@ export async function syncUserToFirestore(user: User): Promise<void> {
   try {
     const snapshot = await getDoc(userRef);
     const isNewUser = !snapshot.exists();
+    const isUserAdmin = isAdminEmail(user.email) || intendedRole === 'admin';
 
     await setDoc(
       userRef,
@@ -76,8 +81,8 @@ export async function syncUserToFirestore(user: User): Promise<void> {
         email: user.email ?? null,
         photoURL: user.photoURL ?? null,
         lastLoginAt: serverTimestamp(),
+        role: isUserAdmin ? 'admin' : (snapshot.data()?.role || 'citizen'),
         ...(isNewUser && {
-          role: 'citizen',
           createdAt: serverTimestamp(),
         }),
       },

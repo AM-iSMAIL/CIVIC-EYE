@@ -41,7 +41,7 @@ export const PriorityQueue: React.FC<PriorityQueueProps> = ({
   return (
     <div className="space-y-4">
       {/* Tier Filter Tabs */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-slate-800 pb-3">
+      <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-3">
         {(
           [
             { id: 'all', label: 'All Tiers', count: incidents.length },
@@ -49,25 +49,21 @@ export const PriorityQueue: React.FC<PriorityQueueProps> = ({
               id: 'critical',
               label: 'Critical (75–100)',
               count: incidents.filter((i) => i.priority?.level === 'critical').length,
-              color: 'text-rose-400 border-rose-800/80',
             },
             {
               id: 'high',
               label: 'High (50–74)',
               count: incidents.filter((i) => i.priority?.level === 'high').length,
-              color: 'text-orange-400 border-orange-800/80',
             },
             {
               id: 'medium',
               label: 'Medium (25–49)',
               count: incidents.filter((i) => i.priority?.level === 'medium').length,
-              color: 'text-cyan-400 border-cyan-800/80',
             },
             {
               id: 'low',
               label: 'Low (0–24)',
               count: incidents.filter((i) => i.priority?.level === 'low').length,
-              color: 'text-emerald-400 border-emerald-800/80',
             },
           ] as const
         ).map((tab) => {
@@ -76,14 +72,14 @@ export const PriorityQueue: React.FC<PriorityQueueProps> = ({
             <button
               key={tab.id}
               onClick={() => setTierFilter(tab.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex items-center gap-2 ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 cursor-pointer ${
                 isActive
-                  ? 'bg-slate-800 text-white border border-slate-600 shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                  ? 'bg-slate-900 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
               }`}
             >
               <span>{tab.label}</span>
-              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-slate-950 text-slate-300">
+              <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded-full ${isActive ? 'bg-slate-800 text-slate-200' : 'bg-slate-100 text-slate-600'}`}>
                 {tab.count}
               </span>
             </button>
@@ -93,8 +89,8 @@ export const PriorityQueue: React.FC<PriorityQueueProps> = ({
 
       {/* Queue Items */}
       {filteredIncidents.length === 0 ? (
-        <div className="p-12 text-center space-y-2 border border-slate-800 rounded-xl bg-slate-900/60">
-          <p className="text-sm font-semibold text-slate-300">Queue Clear</p>
+        <div className="p-12 text-center space-y-2 border border-slate-200 rounded-2xl bg-white shadow-xs">
+          <p className="text-sm font-bold text-slate-900">Queue Clear</p>
           <p className="text-xs text-slate-500">
             No active civic hazards in this priority tier require dispatch attention.
           </p>
@@ -110,24 +106,18 @@ export const PriorityQueue: React.FC<PriorityQueueProps> = ({
               <Card
                 key={item.id}
                 onClick={() => onSelectIncident(item)}
-                className={`p-4 border transition-all cursor-pointer hover:border-slate-600 ${
-                  priLevel === 'critical'
-                    ? 'border-rose-900/60 bg-gradient-to-r from-rose-950/20 to-slate-900'
-                    : priLevel === 'high'
-                    ? 'border-orange-900/60 bg-gradient-to-r from-orange-950/20 to-slate-900'
-                    : 'border-slate-800 bg-slate-900/80'
-                }`}
+                className="p-4 border border-slate-200/80 bg-white hover:border-slate-300 shadow-sm transition-all cursor-pointer rounded-2xl"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   {/* Left: Rank & Information */}
                   <div className="flex items-start gap-3.5 min-w-0">
-                    <div className="w-9 h-9 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center shrink-0 font-mono font-black text-sm text-slate-400">
+                    <div className="w-9 h-9 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0 font-mono font-black text-sm text-slate-600">
                       #{idx + 1}
                     </div>
 
                     <div className="space-y-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-bold text-sm text-white">
+                        <span className="font-bold text-sm text-slate-900">
                           {CATEGORY_LABELS[item.category] || item.category}
                         </span>
                         <span
@@ -138,18 +128,18 @@ export const PriorityQueue: React.FC<PriorityQueueProps> = ({
                         <StatusBadge type="status" value={item.status} size="sm" />
                       </div>
 
-                      <p className="text-xs text-slate-300 line-clamp-1">
+                      <p className="text-xs text-slate-600 line-clamp-1">
                         {item.description}
                       </p>
 
-                      <div className="flex items-center gap-3 text-[11px] text-slate-500 font-mono pt-0.5">
+                      <div className="flex items-center gap-3 text-[11px] text-slate-400 font-mono pt-0.5">
                         <span className="flex items-center gap-1">
-                          <MapPin className="w-3 h-3 text-cyan-400" />
+                          <MapPin className="w-3 h-3 text-blue-600" />
                           {item.latitude.toFixed(4)}°, {item.longitude.toFixed(4)}°
                         </span>
                         <span>•</span>
                         <span className="flex items-center gap-1">
-                          <Clock className="w-3 h-3 text-slate-500" />
+                          <Clock className="w-3 h-3 text-slate-400" />
                           {new Date(item.createdAt).toLocaleDateString()}
                         </span>
                       </div>
@@ -157,21 +147,21 @@ export const PriorityQueue: React.FC<PriorityQueueProps> = ({
                   </div>
 
                   {/* Right: Priority Metrics & Action */}
-                  <div className="flex items-center gap-4 shrink-0 sm:border-l sm:border-slate-800/80 sm:pl-4 justify-between sm:justify-end">
+                  <div className="flex items-center gap-4 shrink-0 sm:border-l sm:border-slate-100 sm:pl-4 justify-between sm:justify-end">
                     {/* Priority & Reports */}
                     <div className="text-right">
                       <div className="flex items-center gap-1.5 justify-end">
                         <span className="text-xs font-medium text-slate-400 uppercase">
                           Priority
                         </span>
-                        <span className="text-base font-black text-white font-mono">
+                        <span className="text-base font-black text-slate-950 font-mono">
                           {priScore}
                         </span>
                       </div>
-                      <div className="flex items-center gap-1 text-[11px] text-emerald-400 font-mono justify-end">
+                      <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-bold font-mono justify-end">
                         <span>{item.reportCount} reports</span>
                         {item.reportCount > 1 && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                         )}
                       </div>
                     </div>
