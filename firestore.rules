@@ -1,0 +1,97 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Role-based administrator authorization check
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.admin == true ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin')
+      );
+    }
+
+    // User profile documents (Phase 2 & 8)
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+
+      // Normal client signup: strictly forced to 'citizen'
+      allow create: if isOwner(userId)
+        && request.resource.data.role == 'citizen';
+
+      // Self-update: cannot elevate own role (must preserve existing role)
+      // Admins can update roles
+      allow update: if (isOwner(userId) && request.resource.data.role == resource.data.role)
+        || isAdmin();
+
+      allow delete: if false;
+    }
+
+    // Private citizen incident reports (Contains full reporter identity - Phase 5, 7, 8)
+    match /incidents/{incidentId} {
+      allow create: if isAuthenticated()
+        && request.resource.data.reporter.uid == request.auth.uid
+        && request.resource.data.status == 'reported'
+        && request.resource.data.location.latitude is number
+        && request.resource.data.location.latitude >= -90.0
+        && request.resource.data.location.latitude <= 90.0
+        && request.resource.data.location.longitude is number
+        && request.resource.data.location.longitude >= -180.0
+        && request.resource.data.location.longitude <= 180.0
+        && request.resource.data.location.accuracy >= 0;
+
+      // Author can read their own report; Admin can read all reports for dispatch
+      allow read: if isAuthenticated()
+        && (resource.data.reporter.uid == request.auth.uid || isAdmin());
+
+      // Author can attach post-submission intelligence (clusterId, duplicateAnalysis, priority)
+      // Admin can update status and statusHistory ONLY
+      allow update: if (
+        isAuthenticated() && resource.data.reporter.uid == request.auth.uid
+      ) || (
+        isAdmin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt', 'statusHistory'])
+      );
+
+      allow delete: if false;
+    }
+
+    // Public sanitized incident reports (Map dataset - Phase 6, 7, 8)
+    match /publicIncidents/{incidentId} {
+      allow read: if true;
+
+      allow create: if isAuthenticated()
+        && request.resource.data.id == incidentId
+        && request.resource.data.status == 'reported'
+        && request.resource.data.latitude is number
+        && request.resource.data.latitude >= -90.0
+        && request.resource.data.latitude <= 90.0
+        && request.resource.data.longitude is number
+        && request.resource.data.longitude >= -180.0
+        && request.resource.data.longitude <= 180.0
+        && request.resource.data.accuracy >= 0;
+
+      // Allow cluster metadata synchronization & admin status dispatch
+      allow update: if isAuthenticated();
+      allow delete: if false;
+    }
+
+    // Consolidated Civic Incident Clusters (Phase 7 & 8)
+    match /incidentClusters/{clusterId} {
+      // Public read access for tactical cluster visualization
+      allow read: if true;
+
+      // Authenticated system/citizens can create clusters; Admins can update status
+      allow create, update: if isAuthenticated();
+
+      allow delete: if false;
+    }
+  }
+}
