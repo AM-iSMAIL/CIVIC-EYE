@@ -63,17 +63,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                     : 'text-slate-300 hover:bg-slate-900'
                 }`}
               >
-                Incidents Table
-              </Link>
-              <Link
-                href="/admin/priority"
-                className={`block px-4 py-3 rounded-xl text-sm font-semibold ${
-                  pathname.startsWith('/admin/priority')
-                    ? 'bg-emerald-950 text-emerald-300 border border-emerald-800'
-                    : 'text-slate-300 hover:bg-slate-900'
-                }`}
-              >
-                Priority Queue
+                Incident Queue
               </Link>
               <Link
                 href="/admin/map"
@@ -83,7 +73,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                     : 'text-slate-300 hover:bg-slate-900'
                 }`}
               >
-                Tactical Map
+                Civic Map
               </Link>
               <Link
                 href="/admin/analytics"
@@ -94,6 +84,16 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 }`}
               >
                 Analytics
+              </Link>
+              <Link
+                href="/admin"
+                className={`block px-4 py-3 rounded-xl text-sm font-semibold ${
+                  pathname === '/admin'
+                    ? 'bg-emerald-950 text-emerald-300 border border-emerald-800'
+                    : 'text-slate-300 hover:bg-slate-900'
+                }`}
+              >
+                Admin Hub
               </Link>
             </div>
           </div>

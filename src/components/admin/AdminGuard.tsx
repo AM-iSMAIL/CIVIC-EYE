@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
-import { ShieldAlert, ShieldX, LogIn, ArrowLeft, Radio } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { Loader2, ShieldAlert, LogIn } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/common/Button';
 import { Card } from '@/components/common/Card';
@@ -14,6 +14,15 @@ interface AdminGuardProps {
 export const AdminGuard: React.FC<AdminGuardProps> = ({ children }) => {
   const { currentUser, firebaseUser, loading, isAdmin, isConfigured, signInWithGoogle } =
     useAuth();
+  const router = useRouter();
+
+  // Hard-redirect citizens away from admin routes.
+  // This runs after auth resolves so we don't flicker.
+  useEffect(() => {
+    if (!loading && firebaseUser && !isAdmin) {
+      router.replace('/');
+    }
+  }, [loading, firebaseUser, isAdmin, router]);
 
   // 1. Loading State
   if (loading) {
@@ -37,7 +46,7 @@ export const AdminGuard: React.FC<AdminGuardProps> = ({ children }) => {
     );
   }
 
-  // 2. Unauthenticated State
+  // 2. Unauthenticated — prompt sign-in
   if (!firebaseUser) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center p-4">
@@ -63,67 +72,21 @@ export const AdminGuard: React.FC<AdminGuardProps> = ({ children }) => {
             >
               Sign In with Google
             </Button>
-            <Link href="/">
-              <Button variant="outline" leftIcon={<ArrowLeft className="w-4 h-4" />}>
-                Back to Home
-              </Button>
-            </Link>
           </div>
         </Card>
       </div>
     );
   }
 
-  // 3. Authenticated but Citizen Role (Access Denied)
+  // 3. Authenticated but Citizen — redirect is in progress (useEffect above).
+  // Render a silent loading state while the redirect fires to prevent flash.
   if (!isAdmin) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center p-4">
-        <Card className="max-w-lg w-full border-rose-800/50 bg-slate-900/95 shadow-2xl p-6 sm:p-8 text-center space-y-5">
-          <div className="w-14 h-14 mx-auto rounded-2xl bg-rose-950/50 border border-rose-700/60 flex items-center justify-center text-rose-400 shadow-inner">
-            <ShieldX className="w-7 h-7" />
-          </div>
-
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-rose-950/60 text-rose-400 border border-rose-800/60">
-              <Radio className="w-3 h-3 animate-pulse" />
-              Access Denied • 403 Forbidden
-            </div>
-            <h2 className="text-xl font-extrabold text-white tracking-tight">
-              Administrative Clearance Required
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Your account (<span className="text-slate-100 font-mono font-medium">{currentUser?.email || firebaseUser.email}</span>) is currently registered with <span className="text-emerald-400 font-semibold uppercase text-xs">Citizen</span> privileges. Municipal operations and incident dispatch workflows require administrative clearance.
-            </p>
-          </div>
-
-          <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800 text-[11px] text-slate-400 text-left font-mono space-y-1">
-            <div className="flex justify-between">
-              <span>Account UID:</span>
-              <span className="text-slate-300 truncate max-w-[200px]">{firebaseUser.uid}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Current Role:</span>
-              <span className="text-emerald-400 font-semibold">{currentUser?.role || 'citizen'}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Required Role:</span>
-              <span className="text-rose-400 font-semibold">admin</span>
-            </div>
-          </div>
-
-          <div className="pt-3 flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/map">
-              <Button variant="primary" leftIcon={<ArrowLeft className="w-4 h-4" />}>
-                Explore Civic Map
-              </Button>
-            </Link>
-            <Link href="/report">
-              <Button variant="outline">
-                Submit Civic Report
-              </Button>
-            </Link>
-          </div>
-        </Card>
+        <div className="text-center space-y-3">
+          <Loader2 className="w-6 h-6 animate-spin text-slate-500 mx-auto" />
+          <p className="text-xs text-slate-500">Redirecting...</p>
+        </div>
       </div>
     );
   }

@@ -9,7 +9,6 @@ import { useAuth } from '@/context/AuthContext';
 import {
   PlusCircle,
   Map,
-  Shield,
   Home,
   Menu,
   X,
@@ -18,30 +17,40 @@ import {
   LogOut,
   User,
   Loader2,
+  FileText,
+  Bell,
 } from 'lucide-react';
 import { Button } from './Button';
 import { CivicEyeLogo } from '@/components/splash/CivicEyeLogo';
+
+/** Maps citizen nav hrefs to their lucide icon. */
+const getNavIcon = (href: string) => {
+  switch (href) {
+    case '/':
+      return <Home className="w-4 h-4" />;
+    case '/report':
+      return <PlusCircle className="w-4 h-4" />;
+    case '/map':
+      return <Map className="w-4 h-4" />;
+    case '/my-reports':
+      return <FileText className="w-4 h-4" />;
+    case '/notifications':
+      return <Bell className="w-4 h-4" />;
+    default:
+      return <Activity className="w-4 h-4" />;
+  }
+};
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const { currentUser, loading, signInWithGoogle, signOut } = useAuth();
 
-  const getNavIcon = (href: string) => {
-    switch (href) {
-      case '/':
-        return <Home className="w-4 h-4" />;
-      case '/report':
-        return <PlusCircle className="w-4 h-4" />;
-      case '/map':
-        return <Map className="w-4 h-4" />;
-      case '/admin':
-        return <Shield className="w-4 h-4" />;
-      default:
-        return <Activity className="w-4 h-4" />;
-    }
-  };
+  // Always use citizen nav items — this Navbar is never shown on /admin/* routes
+  // (RootShell suppresses it there). So we only need citizenNavItems here.
+  const navItems = siteConfig.citizenNavItems;
 
+  /* ── Shared desktop user section ── */
   const renderUserSection = () => {
     if (loading) {
       return (
@@ -101,6 +110,7 @@ export const Navbar: React.FC = () => {
     );
   };
 
+  /* ── Mobile user section ── */
   const renderMobileUserSection = () => {
     if (loading) {
       return (
@@ -193,9 +203,9 @@ export const Navbar: React.FC = () => {
             </div>
           </Link>
 
-          {/* Desktop Navigation Links */}
+          {/* Desktop Navigation Links — citizen nav only */}
           <nav className="hidden md:flex items-center gap-1" aria-label="Main Navigation">
-            {siteConfig.navItems.map((item) => {
+            {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (
                 <Link
@@ -248,7 +258,7 @@ export const Navbar: React.FC = () => {
       {isOpen && (
         <div className="md:hidden border-b border-slate-800 bg-slate-950/95 backdrop-blur-xl px-4 pt-3 pb-6 space-y-2 animate-in slide-in-from-top duration-200">
           <nav className="space-y-1" aria-label="Mobile Navigation">
-            {siteConfig.navItems.map((item) => {
+            {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (
                 <Link

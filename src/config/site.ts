@@ -10,7 +10,8 @@ export const siteConfig = {
   tagline: 'Report civic problems. Let AI understand them. Help build a better city.',
   description:
     'An AI-powered civic issue reporting and city intelligence platform. Seamlessly connect citizens and municipal departments through automated visual AI and real-time geospatial dispatch.',
-  navItems: [
+  /** Navigation items shown to authenticated citizens (no admin links). */
+  citizenNavItems: [
     {
       title: 'Home',
       href: '/',
@@ -25,6 +26,40 @@ export const siteConfig = {
       title: 'Civic Map',
       href: '/map',
       description: 'Explore live city-wide incidents',
+    },
+    {
+      title: 'My Reports',
+      href: '/my-reports',
+      description: 'Track your submitted civic issues',
+    },
+    {
+      title: 'Notifications',
+      href: '/notifications',
+      description: 'Status updates on your reports',
+    },
+  ] satisfies NavItem[],
+
+  /** Navigation items shown in the Admin shell sidebar/header. */
+  adminNavItems: [
+    {
+      title: 'Overview',
+      href: '/admin',
+      description: 'Command center dashboard',
+    },
+    {
+      title: 'Incident Queue',
+      href: '/admin/incidents',
+      description: 'Manage and triage all civic incidents',
+    },
+    {
+      title: 'Civic Map',
+      href: '/admin/map',
+      description: 'Tactical geospatial incident view',
+    },
+    {
+      title: 'Analytics',
+      href: '/admin/analytics',
+      description: 'Municipal performance metrics',
     },
     {
       title: 'Admin Hub',

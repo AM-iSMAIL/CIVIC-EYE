@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { Navbar } from '@/components/common/Navbar';
-import { Footer } from '@/components/common/Footer';
+import { RootShell } from '@/components/common/RootShell';
 import { siteConfig } from '@/config/site';
 import { AuthProvider } from '@/context/AuthContext';
 
@@ -41,11 +40,10 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} h-full antialiased dark`}>
       <body className="min-h-screen flex flex-col bg-[#0b0f19] text-slate-100 font-sans selection:bg-emerald-500/30 selection:text-emerald-300">
         <AuthProvider>
-          <Navbar />
-          <main className="flex-1 flex flex-col">{children}</main>
-          <Footer />
+          <RootShell>{children}</RootShell>
         </AuthProvider>
       </body>
     </html>
   );
 }
+

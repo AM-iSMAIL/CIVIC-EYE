@@ -37,7 +37,7 @@ export const Footer: React.FC = () => {
               Platform
             </h4>
             <ul className="space-y-2 text-xs">
-              {siteConfig.navItems.map((item) => (
+              {siteConfig.citizenNavItems.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}

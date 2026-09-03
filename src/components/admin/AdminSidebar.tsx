@@ -34,18 +34,13 @@ export const AdminSidebar: React.FC = () => {
       icon: <LayoutDashboard className="w-4 h-4" />,
     },
     {
-      label: 'Incidents Table',
+      label: 'Incident Queue',
       href: '/admin/incidents',
       icon: <ClipboardList className="w-4 h-4" />,
+      badge: 'Live',
     },
     {
-      label: 'Priority Queue',
-      href: '/admin/priority',
-      icon: <Flame className="w-4 h-4 text-rose-400" />,
-      badge: 'Urgent',
-    },
-    {
-      label: 'Tactical Map',
+      label: 'Civic Map',
       href: '/admin/map',
       icon: <MapPin className="w-4 h-4 text-cyan-400" />,
     },
@@ -53,6 +48,11 @@ export const AdminSidebar: React.FC = () => {
       label: 'Analytics',
       href: '/admin/analytics',
       icon: <BarChart3 className="w-4 h-4" />,
+    },
+    {
+      label: 'Admin Hub',
+      href: '/admin',
+      icon: <Flame className="w-4 h-4 text-rose-400" />,
     },
   ];
 
