@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "cap:sync": "cap sync android",
-    "cap:open": "cap open android",
+    "cap:open": "start \"\" \"C:\\Program Files\\Android\\Android Studio\\bin\\studio64.exe\" ./android",
     "cap:run": "cap run android",
     "cap:doctor": "cap doctor"
   },
