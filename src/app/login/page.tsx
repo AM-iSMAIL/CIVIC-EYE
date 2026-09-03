@@ -12,10 +12,21 @@ import { ArrowRight, ShieldCheck, MapPin, Sparkles, Loader2, AlertTriangle } fro
 export default function LoginPage() {
   const router = useRouter();
   const { currentUser: user, signInWithGoogle, isConfigured, error, isAdmin } = useAuth();
-  const [showSplash, setShowSplash] = useState<boolean>(true);
+  const [showSplash, setShowSplash] = useState<boolean>(false);
   const [isSigningIn, setIsSigningIn] = useState<boolean>(false);
 
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      const hasSeen = sessionStorage.getItem('civiceye_splash_viewed');
+      if (!hasSeen) {
+        setShowSplash(true);
+      }
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleSplashComplete = () => {
+    sessionStorage.setItem('civiceye_splash_viewed', 'true');
     setShowSplash(false);
   };
 

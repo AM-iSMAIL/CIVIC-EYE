@@ -8,6 +8,7 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
+import { useRouter } from 'next/navigation';
 import { onAuthStateChanged, type User } from 'firebase/auth';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { auth, db, isFirebaseConfigured } from '@/services/firebase';
@@ -114,14 +115,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  const router = useRouter();
+
   const signOut = useCallback(async () => {
     setError(null);
     const result = await doSignOut();
 
     if (result.error) {
       setError(result.error.message);
+    } else {
+      router.push('/login');
     }
-  }, []);
+  }, [router]);
 
   const isAdmin = useMemo(() => {
     return currentUser?.role === 'admin';
