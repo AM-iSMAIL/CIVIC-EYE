@@ -14,7 +14,10 @@
 
 CivicEye bridges citizens and municipal departments through automated visual AI, real-time geospatial dispatch, and a comprehensive operations command center — all in a single platform.
 
+
 </div>
+
+
 
 ---
 
